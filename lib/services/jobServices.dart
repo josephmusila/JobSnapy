@@ -21,20 +21,23 @@ class JobService {
     }
   }
 
-  Future<dynamic> postJob(
-      {required String jobName,
-      required String jobDescription,
-        required String applicationMethod,
-        required bool verified,
-      required String postedBy}) async {
+  Future<dynamic> postJob({
+    required String jobName, required String jobDescription,
+    required String applicationMethod, required bool verified,
+
+    required String postedBy}) async {
     try {
+
+
       var response =
           await http.post(Uri.parse("${BaseUrls().baseUrl}jobs/"), body: {
             "application_method":applicationMethod,
         "posted_by": postedBy,
         "job_name": jobName,
+            // "poster":poster,
         "job_description": jobDescription,
-            "verified":"true"
+            "verified":"true",
+
       });
       if(response.statusCode == 200){
         getAllJobs();
@@ -44,6 +47,43 @@ class JobService {
       }
 
     }  catch (e) {
+      throw e;
+    }
+  }
+
+  Future<dynamic> jobPoster(
+      {
+        required bool verified,
+        required bool isImage,
+        required String poster,
+        required String postedBy}) async {
+    try {
+      var request = http.MultipartRequest(
+          "POST", Uri.parse("${BaseUrls().baseUrl}jobs/"));
+
+
+
+      request.fields["verified"] = "true";
+      request.fields["isImage"] = "true";
+      request.fields["posted_by"] = postedBy;
+
+      request.files.add(await http.MultipartFile.fromPath("poster", poster));
+
+      var res = await request.send();
+      var response = await http.Response.fromStream(res);
+
+      if (response.statusCode == 200) {
+        getAllJobs();
+        print(response.body);
+
+        return response.statusCode;
+      } else {
+        print(response.body);
+        return response.statusCode;
+
+      }
+    } catch (e) {
+      print(e.toString());
       throw e;
     }
   }

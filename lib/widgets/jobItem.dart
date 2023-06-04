@@ -129,7 +129,7 @@ class _JobItemState extends State<JobItem> {
                               MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.searched_list[widget.index].jobName,
+                                  widget.searched_list[widget.index].jobName as String,
                                   overflow: TextOverflow.ellipsis,
                                   // softWrap: false,
                                   maxLines: 1,
@@ -140,7 +140,7 @@ class _JobItemState extends State<JobItem> {
                                 ),
                                 Text(
                                   widget.searched_list[widget.index]
-                                      .jobDescription,
+                                      .jobDescription as String,
                                   overflow: TextOverflow.ellipsis,
                                   // softWrap: true,
                                   maxLines: 3,

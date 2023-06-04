@@ -336,14 +336,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 : Column(
                     children: List.generate(
                       appliedJobs.length,
-                      (index) => Card(
+                      (index) => appliedJobs[index].isImage?Container(
+                        height: 200,
+                        width: double.maxFinite,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Image.network(
+                                  appliedJobs[index].poster.toString()),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+
+                                TextButton(
+                                  child: const Text(
+                                    "See Details",
+                                    style: TextStyle(
+                                        color: AppColors.appPrimaryColor),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                          return JobDetail(appliedJobs[index],
+                                              widget.user);
+                                        }));
+                                  },
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ):Card(
                         elevation: 5,
                         color: AppColors.whiteColor,
                         child: ListTile(
                           onTap: () {
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
-                              return JobDetail(userJobs[index], widget.user);
+                              return JobDetail(appliedJobs[index], widget.user);
                             }));
                           },
                           leading: Text(

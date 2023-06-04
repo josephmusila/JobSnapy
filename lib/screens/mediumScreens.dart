@@ -295,8 +295,8 @@ class _MediumScreenState extends State<MediumScreen> {
     final input = query.toLowerCase();
     setState(() {
       searched_list = widget.jobs.where((element) {
-        return (element.jobDescription.toLowerCase()).contains(input) ||
-            (element.jobName.toLowerCase()).contains(input) ||
+        return (element.jobDescription.toString().toLowerCase()).contains(input) ||
+            (element.jobName.toString().toLowerCase()).contains(input) ||
             (element.postedBy.firstName + element.postedBy.lastName)
                 .contains(input);
       }).toList();

@@ -65,24 +65,26 @@ class _JobDetailState extends State<JobDetail> {
       onWillPop: () async => true,
       child: Scaffold(
         backgroundColor: AppColors.appMainColor2,
-        appBar: MediaQuery.of(context).size.width < 700?AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigator.of(context).pop();
-            },
-          ),
+        appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // Navigator.of(context).pop();
+                  },
+                ),
 
-          backgroundColor: AppColors.appMainColor2,
-          // elevation: 0,
-          title: Text(
-            "Job Id: ${widget.job.id.toString()}",
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-            // overflow: TextOverflow.ellipsis,
-          ),
-        ):null,
+                backgroundColor: AppColors.appMainColor2,
+                // elevation: 0,
+                title: Text(
+                  "Job Id: ${widget.job.id.toString()}",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w400),
+                  // overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
         body: BlocProvider(
           create: (context) => CommentsCubit(jobService: jobService),
           child: Container(
@@ -98,95 +100,114 @@ class _JobDetailState extends State<JobDetail> {
                 : ListView(
                     padding: const EdgeInsets.only(top: 10),
                     children: [
-                      Card(
-                        color: Colors.transparent,
-                        elevation: 4,
-                        child: Container(
-                          // height: 200,
-                          width: double.maxFinite,
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            color: AppColors.whiteColor1,
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              topLeft: Radius.circular(10),
+                      widget.job.isImage
+                          ? Container(
+                              height: 300,
+                              color: Colors.red,
+                              child: Image.network(
+                                widget.job.poster.toString(),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Card(
+                              color: Colors.transparent,
+                              elevation: 4,
+                              child: Container(
+                                // height: 200,
+                                width: double.maxFinite,
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.whiteColor1,
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    topLeft: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Wrap(
+                                  direction: Axis.vertical,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width >
+                                              500
+                                          ? MediaQuery.of(context).size.width *
+                                              0.4
+                                          : MediaQuery.of(context).size.width *
+                                              0.8,
+                                      child: Text(
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                        widget.job.jobName as String,
+                                        style: const TextStyle(
+                                          height: 1.4,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.appTextColor1,
+                                        ),
+                                      ),
+                                    ),
+                                    const Divider(
+                                      color: AppColors.appMainColor2,
+                                      height: 1,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width >
+                                              500
+                                          ? MediaQuery.of(context).size.width *
+                                              0.4
+                                          : MediaQuery.of(context).size.width *
+                                              0.8,
+                                      child: Text(
+                                        widget.job.jobDescription as String,
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                        style: const TextStyle(
+                                          height: 1.4,
+                                          fontSize: 14,
+                                          color: AppColors.appTextColor1,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    const Text(
+                                      "Method of Application",
+                                      style: TextStyle(
+                                        color: AppColors.appTextColor1,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width >
+                                              500
+                                          ? MediaQuery.of(context).size.width *
+                                              0.4
+                                          : MediaQuery.of(context).size.width *
+                                              0.8,
+                                      child: Text(
+                                        widget.job.applicationMethod == null
+                                            ? "Not Provided"
+                                            : widget.job.applicationMethod
+                                                as String,
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
+                                        style: const TextStyle(
+                                          height: 1.4,
+                                          fontSize: 14,
+                                          color: AppColors.appTextColor1,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                          child: Wrap(
-                            direction: Axis.vertical,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width > 500
-                                    ? MediaQuery.of(context).size.width * 0.4
-                                    : MediaQuery.of(context).size.width * 0.8,
-                                child: Text(
-                                  softWrap: true,
-                                  overflow: TextOverflow.visible,
-                                  widget.job.jobName,
-                                  style: const TextStyle(
-                                    height: 1.4,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.appTextColor1,
-                                  ),
-                                ),
-                              ),
-                              const Divider(
-                                color: AppColors.appMainColor2,
-                                height: 1,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width > 500
-                                    ? MediaQuery.of(context).size.width * 0.4
-                                    : MediaQuery.of(context).size.width * 0.8,
-                                child: Text(
-                                  widget.job.jobDescription,
-                                  softWrap: true,
-                                  overflow: TextOverflow.visible,
-                                  style: const TextStyle(
-                                    height: 1.4,
-                                    fontSize: 14,
-                                    color: AppColors.appTextColor1,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text(
-                                "Method of Application",
-                                style: TextStyle(
-                                  color: AppColors.appTextColor1,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width > 500
-                                    ? MediaQuery.of(context).size.width * 0.4
-                                    : MediaQuery.of(context).size.width * 0.8,
-                                child: Text(
-                                  widget.job.applicationMethod == null
-                                      ? "Not Provided"
-                                      : widget.job.applicationMethod as String,
-                                  softWrap: true,
-                                  overflow: TextOverflow.clip,
-                                  style: const TextStyle(
-                                    height: 1.4,
-                                    fontSize: 14,
-                                    color: AppColors.appTextColor1,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                       Container(
                         height: 200,
                         width: double.maxFinite,
@@ -301,7 +322,17 @@ class _JobDetailState extends State<JobDetail> {
                                           .showSnackBar(Utils.displayToast(
                                               "Please Login to complete application",
                                               AppColors.appPrimaryColor));
-                                    } else {
+                                    }else if(widget.job.postedBy.id == widget.user?.id){
+                                      setState(() {
+                                        applicationLoader = false;
+                                      });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(Utils.displayToast(
+                                          "Operation not allowed as you are the job owner",
+                                          AppColors.appPrimaryColor));
+                                    }
+
+                                    else {
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -567,7 +598,11 @@ class _JobDetailState extends State<JobDetail> {
                                                           .showSnackBar(
                                                         const SnackBar(
                                                           content: Text(
-                                                              "Comment Posted",style: TextStyle(color: Colors.white),),
+                                                            "Comment Posted",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
                                                           backgroundColor:
                                                               Colors.green,
                                                           dismissDirection:

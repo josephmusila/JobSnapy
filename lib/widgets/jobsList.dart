@@ -106,9 +106,9 @@ class _JobListState extends State<JobList> {
             Icons.add,
             color: Colors.white,
           )),
-      body: getSizes(context) > 500
-          ? MediumScreen(widget.jobs, widget.user)
-          : CustomScrollView(
+      // body: getSizes(context) > 500
+      //     ? MediumScreen(widget.jobs, widget.user)
+        body  : CustomScrollView(
               slivers: [
                 SliverAppBar(
                   backgroundColor: AppColors.appMainColor2,
@@ -343,8 +343,8 @@ class _JobListState extends State<JobList> {
     final input = query.toLowerCase();
     setState(() {
       searched_list = widget.jobs.where((element) {
-        return (element.jobDescription.toLowerCase()).contains(input) ||
-            (element.jobName.toLowerCase()).contains(input) ||
+        return (element.jobDescription.toString().toLowerCase()).contains(input) ||
+            (element.jobName.toString().toLowerCase()).contains(input) ||
             (element.postedBy.firstName + element.postedBy.lastName)
                 .contains(input);
       }).toList();

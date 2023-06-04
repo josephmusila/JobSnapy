@@ -71,9 +71,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                         top: 0, left: 20, right: 20),
                     height: 300,
                     width: 600,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: ListView(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
 
                         const SizedBox(

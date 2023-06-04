@@ -9,6 +9,8 @@ import '../widgets/loadingScreen.dart';
 import '../widgets/postRules.dart';
 import '../widgets/snackbar.dart';
 import 'homescreen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AddJob extends StatefulWidget {
   UserModel? user;
@@ -24,6 +26,7 @@ class _AddJobState extends State<AddJob> {
   var jobname = TextEditingController();
   var jobdescription = TextEditingController();
   var applicationMethod = TextEditingController();
+  var imageFile;
   JobService jobService = JobService();
   // var jobname = TextEditingController();
   bool isLoading = false;
@@ -93,7 +96,77 @@ class _AddJobState extends State<AddJob> {
                                 fontSize: 15),
                           ),
                         ),
-                        Card(
+                        imageFile != null?Container(
+                          height: MediaQuery.of(context).size.height*0.6,
+                          child: Column(
+                            children: [
+                              Container(
+                                child:Image.file(imageFile,fit: BoxFit.cover,),
+                              ),
+                              Container(
+                                height: 35,
+                                child: TextButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isLoading = true;
+                                      print(imageFile);
+                                    });
+                                    Navigator.of(context)
+                                        .pop(true);
+                                    var res = await jobService
+                                        .jobPoster(verified: true, isImage: true, poster: imageFile.path, postedBy: widget.user?.id.toString() as String);
+                                    print(res);
+                                    if (res == 200 ||
+                                        res == 201) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      ScaffoldMessenger.of(
+                                          context)
+                                          .showSnackBar(Utils
+                                          .displayToast(
+                                          "Job Posted",
+                                          Colors
+                                              .green));
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder:
+                                                  (context) {
+                                                return HomeScreen(
+                                                    widget.user);
+                                              }));
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                          context)
+                                          .showSnackBar(Utils
+                                          .displayToast(
+                                          "Unable to Post the Job \nA network error occurred.",
+                                          Colors.pink));
+                                      print("erro");
+                                    }
+                                    Navigator.of(context)
+                                        .pop(true);
+                                    setState(() {
+                                      jobname.text = "";
+                                      jobdescription.text = "";
+                                      applicationMethod.text =
+                                      "";
+                                      isLoading = false;
+                                    });
+                                    print("erro");
+                                  },
+                                  child: const Text(
+                                    "Post",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ) :Card(
                           color: Colors.transparent,
                           elevation: 5,
                           child: Container(
@@ -311,7 +384,8 @@ class _AddJobState extends State<AddJob> {
                                                       jobName: jobname.text,
                                                       jobDescription:
                                                           jobdescription.text,
-                                                      verified:true
+                                                      verified:true,
+
                                                     );
                                                     print(res);
                                                     if (res == 200 ||
@@ -381,6 +455,115 @@ class _AddJobState extends State<AddJob> {
                                 const SizedBox(
                                   height: 20,
                                 ),
+                                Container(
+                                  width: double.maxFinite,
+                                  height: 35,
+                                  child: ElevatedButton.icon(
+                                    icon: const Icon(
+                                      Icons.upload,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _getFromGallery();
+                                      });
+
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (context) => AlertDialog(
+                                      //     backgroundColor:
+                                      //     AppColors.whiteColor,
+                                      //     title: const Text(
+                                      //       "Confirm Poster",
+                                      //       style: TextStyle(
+                                      //           color: Colors.red),
+                                      //     ),
+                                      //     content: Container(
+                                      //       // child:Image.file(imageFile,fit: BoxFit.cover,),
+                                      //       child:Text("hello"),
+                                      //
+                                      //     ),
+                                      //     actions: [
+                                      //       TextButton(
+                                      //         onPressed: () async {
+                                      //           setState(() {
+                                      //             isLoading = true;
+                                      //             print(imageFile);
+                                      //           });
+                                      //           Navigator.of(context)
+                                      //               .pop(true);
+                                      //           var res = await jobService
+                                      //               .jobPoster(verified: true, isImage: true, poster: imageFile.path, postedBy: widget.user?.id.toString() as String);
+                                      //           print(res);
+                                      //           if (res == 200 ||
+                                      //               res == 201) {
+                                      //             setState(() {
+                                      //               isLoading = false;
+                                      //             });
+                                      //             ScaffoldMessenger.of(
+                                      //                 context)
+                                      //                 .showSnackBar(Utils
+                                      //                 .displayToast(
+                                      //                 "Job Posted",
+                                      //                 Colors
+                                      //                     .green));
+                                      //             Navigator.of(context).push(
+                                      //                 MaterialPageRoute(
+                                      //                     builder:
+                                      //                         (context) {
+                                      //                       return HomeScreen(
+                                      //                           widget.user);
+                                      //                     }));
+                                      //           } else {
+                                      //             ScaffoldMessenger.of(
+                                      //                 context)
+                                      //                 .showSnackBar(Utils
+                                      //                 .displayToast(
+                                      //                 "Unable to Post the Job \nA network error occurred.",
+                                      //                 Colors.pink));
+                                      //             print("erro");
+                                      //           }
+                                      //           Navigator.of(context)
+                                      //               .pop(true);
+                                      //           setState(() {
+                                      //             jobname.text = "";
+                                      //             jobdescription.text = "";
+                                      //             applicationMethod.text =
+                                      //             "";
+                                      //             isLoading = false;
+                                      //           });
+                                      //           print("erro");
+                                      //         },
+                                      //         child: const Text(
+                                      //           "Post",
+                                      //           style: TextStyle(
+                                      //             color: Colors.red,
+                                      //             fontSize: 18,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       const SizedBox(
+                                      //         width: 50,
+                                      //       ),
+                                      //       TextButton(
+                                      //         onPressed: () {
+                                      //           Navigator.of(context)
+                                      //               .pop(false);
+                                      //         },
+                                      //         child: const Text(
+                                      //           "Cancel",
+                                      //           style: TextStyle(
+                                      //               color: Colors.green,
+                                      //               fontSize: 18),
+                                      //         ),
+                                      //       )
+                                      //     ],
+                                      //   ),
+                                      // );
+                                    },
+                                    label: const Text("Or Upload a Job Poster"),
+                                  ),
+
+                                )
                               ],
                             ),
                           ),
@@ -392,5 +575,34 @@ class _AddJobState extends State<AddJob> {
               ),
             ),
     );
+  }
+
+  /// Get from gallery
+  _getFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  /// Get from camera  ////
+
+  _getFromCamera() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
   }
 }

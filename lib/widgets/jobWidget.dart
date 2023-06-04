@@ -9,6 +9,7 @@ import '../models/userModel.dart';
 import '../screens/homescreen.dart';
 import '../screens/jobDetail.dart';
 import '../services/jobServices.dart';
+import 'jobImageWidget.dart';
 
 class JobsWidget extends StatefulWidget {
   List<JobsModel> searched_list;
@@ -63,26 +64,30 @@ class _JobsWidgetState extends State<JobsWidget>
       delegate: SliverChildBuilderDelegate(
         childCount: widget.searched_list.length,
         (_, index) {
-          return JobItem(widget.searched_list, index, () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) =>
-                    JobDetail(widget.searched_list[widget.index], widget.user),
-                transitionDuration: const Duration(milliseconds: 300),
-                transitionsBuilder: (_, a, __, c) => FadeTransition(
-                  opacity: a,
-                  child: c,
+          if(widget.searched_list[index].isImage==true){
+            return JobImageWidget(widget.searched_list[index],widget.user);
+          }else{
+            return JobItem(widget.searched_list, index, () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) =>
+                      JobDetail(widget.searched_list[widget.index], widget.user),
+                  transitionDuration: const Duration(milliseconds: 300),
+                  transitionsBuilder: (_, a, __, c) => FadeTransition(
+                    opacity: a,
+                    child: c,
+                  ),
                 ),
-              ),
-            );
+              );
 
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (context) {
-            //   return JobDetail(widget.searched_list[index], widget.user);
-            // }));
-          }, AppColors.whiteColor1, widget.user);
-        },
+              // Navigator.of(context)
+              //     .push(MaterialPageRoute(builder: (context) {
+              //   return JobDetail(widget.searched_list[index], widget.user);
+              // }));
+            }, AppColors.whiteColor1, widget.user);
+          }
+          }
       ),
     );
   }

@@ -9,41 +9,47 @@ List<JobsModel> jobsModelFromJson(String str) => List<JobsModel>.from(json.decod
 String jobsModelToJson(List<JobsModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class JobsModel {
+    int id;
+    PostedBy postedBy;
+    List<PostedBy> applicants;
+    String jobName;
+    String jobDescription;
+    String applicationMethod;
+    DateTime datePosted;
+    bool isImage;
+    bool expired;
+    bool verified;
+    bool trending;
+    dynamic poster;
+
     JobsModel({
         required this.id,
         required this.postedBy,
         required this.applicants,
         required this.jobName,
         required this.jobDescription,
-        required this.datePosted,
-        required this.expired,
         required this.applicationMethod,
-        required this.trending,
+        required this.datePosted,
+        required this.isImage,
+        required this.expired,
         required this.verified,
+        required this.trending,
+        this.poster,
     });
 
-    int id;
-    PostedBy postedBy;
-    List<PostedBy> applicants;
-    String jobName;
-    String jobDescription;
-    String? applicationMethod;
-    DateTime datePosted;
-    bool expired;
-    bool verified;
-    bool trending;
-
     factory JobsModel.fromJson(Map<String, dynamic> json) => JobsModel(
-        verified:json["verified"],
-        applicationMethod: json["application_method"],
         id: json["id"],
         postedBy: PostedBy.fromJson(json["posted_by"]),
         applicants: List<PostedBy>.from(json["applicants"].map((x) => PostedBy.fromJson(x))),
         jobName: json["job_name"],
         jobDescription: json["job_description"],
+        applicationMethod: json["application_method"],
         datePosted: DateTime.parse(json["date_posted"]),
+        isImage: json["isImage"],
         expired: json["expired"],
+        verified: json["verified"],
         trending: json["trending"],
+        poster: json["poster"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,15 +58,23 @@ class JobsModel {
         "applicants": List<dynamic>.from(applicants.map((x) => x.toJson())),
         "job_name": jobName,
         "job_description": jobDescription,
+        "application_method": applicationMethod,
         "date_posted": datePosted.toIso8601String(),
+        "isImage": isImage,
         "expired": expired,
+        "verified": verified,
         "trending": trending,
-        "application_method":applicationMethod,
-        "verified":verified
+        "poster": poster,
     };
 }
 
 class PostedBy {
+    int id;
+    String firstName;
+    String lastName;
+    String email;
+    String phone;
+
     PostedBy({
         required this.id,
         required this.firstName,
@@ -69,17 +83,11 @@ class PostedBy {
         required this.phone,
     });
 
-    int id;
-    String firstName;
-    String lastName;
-    String email;
-    String phone;
-
     factory PostedBy.fromJson(Map<String, dynamic> json) => PostedBy(
         id: json["id"],
         firstName: json["first_name"],
-        lastName: json["last_name"]!,
-        email: json["email"]!,
+        lastName: json["last_name"],
+        email: json["email"],
         phone: json["phone"],
     );
 
@@ -91,8 +99,3 @@ class PostedBy {
         "phone": phone,
     };
 }
-
-
-
-
-

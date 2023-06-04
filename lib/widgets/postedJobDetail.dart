@@ -26,7 +26,7 @@ class PostedJobDetail extends StatefulWidget {
 
 class _PostedJobDetailState extends State<PostedJobDetail> {
   ShowApplicants showApplicants = ShowApplicants(index: 0, isVisible: false);
-  JobService jobService=JobService();
+  JobService jobService = JobService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +37,16 @@ class _PostedJobDetailState extends State<PostedJobDetail> {
           children: [
             Dismissible(
               key: UniqueKey(),
-              onDismissed: (direction){
+              onDismissed: (direction) {
                 setState(() {
                   jobService.deleteJob(
                       user: widget.user?.id.toString() as String,
-                      id:  widget.userJobs[index].id.toString());
+                      id: widget.userJobs[index].id.toString());
                   jobService.getAllJobs();
                   widget.userJobs.removeAt(index);
                 });
               },
-              confirmDismiss: (direction){
+              confirmDismiss: (direction) {
                 return showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -83,15 +83,17 @@ class _PostedJobDetailState extends State<PostedJobDetail> {
                         },
                         child: const Text(
                           "Cancel",
-                          style:
-                          TextStyle(color: Colors.green, fontSize: 18),
+                          style: TextStyle(color: Colors.green, fontSize: 18),
                         ),
                       )
                     ],
                   ),
                 );
               },
-              background: Container(color: AppColors.appMainColor1,child: Icon(Icons.delete),),
+              background: Container(
+                color: AppColors.appMainColor1,
+                child: Icon(Icons.delete),
+              ),
               child: Card(
                 elevation: 2,
                 color: Colors.transparent,
@@ -104,69 +106,107 @@ class _PostedJobDetailState extends State<PostedJobDetail> {
                   padding: const EdgeInsets.all(5),
                   height: 100,
                   width: double.maxFinite,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                          child: Text(
-                        "${index + 1}. ${widget.userJobs[index].jobName}",
-                        style: const TextStyle(color: AppColors.appTextColor1, fontSize: 16),
-                      )),
-                      Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: TextButton(
-                            child: const Text(
-                              "See Details",
-                              style: TextStyle(color: AppColors.appPrimaryColor),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return JobDetail(
-                                    widget.userJobs[index], widget.user);
-                              }));
-                            },
-                          )),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              showApplicants.isVisible =
-                                  !showApplicants.isVisible;
-                              showApplicants.index = index;
-                            });
-                          },
-                          child: Card(
-                            color: Colors.transparent,
-                            elevation: 2,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(5)),
-                                 color: AppColors.appMainColor1,
+                  child: widget.userJobs[index].isImage
+                      ? Container(
+                          height: 200,
+                          width: double.maxFinite,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Image.network(
+                                    widget.userJobs[index].poster.toString()),
                               ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
 
-                              child: Text(
-                                "${widget.userJobs[index].applicants.length}  ${widget.userJobs[index].applicants.length == 1 ? "applicant" : "applicants"}",
-                                style: const TextStyle(
-                                    color: AppColors.appTextColor3, fontSize: 16),
-                              ),
-                            ),
+                                  TextButton(
+                                    child: const Text(
+                                      "See Details",
+                                      style: TextStyle(
+                                          color: AppColors.appPrimaryColor),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return JobDetail(widget.userJobs[index],
+                                            widget.user);
+                                      }));
+                                    },
+                                  )
+                                ],
+                              )
+                            ],
                           ),
+                        )
+                      : Stack(
+                          children: [
+                            Positioned(
+                                child: Text(
+                              "${index + 1}. ${widget.userJobs[index].jobName}",
+                              style: const TextStyle(
+                                  color: AppColors.appTextColor1, fontSize: 16),
+                            )),
+                            Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: TextButton(
+                                  child: const Text(
+                                    "See Details",
+                                    style: TextStyle(
+                                        color: AppColors.appPrimaryColor),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return JobDetail(
+                                          widget.userJobs[index], widget.user);
+                                    }));
+                                  },
+                                )),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    showApplicants.isVisible =
+                                        !showApplicants.isVisible;
+                                    showApplicants.index = index;
+                                  });
+                                },
+                                child: Card(
+                                  color: Colors.transparent,
+                                  elevation: 2,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      color: AppColors.appMainColor1,
+                                    ),
+                                    child: Text(
+                                      "${widget.userJobs[index].applicants.length}  ${widget.userJobs[index].applicants.length == 1 ? "applicant" : "applicants"}",
+                                      style: const TextStyle(
+                                          color: AppColors.appTextColor3,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
                 ),
               ),
             ),
             showApplicants.index == index && showApplicants.isVisible == true
                 ? Card(
-                  elevation: 5,
-                  color: Colors.transparent,
-                  child: Container(
+                    elevation: 5,
+                    color: Colors.transparent,
+                    child: Container(
                       margin: const EdgeInsets.only(left: 10, right: 10),
                       decoration: const BoxDecoration(
                         color: AppColors.whiteColor,
@@ -177,10 +217,11 @@ class _PostedJobDetailState extends State<PostedJobDetail> {
                         ),
                       ),
                       child: ApplicantsWidget(
-                        applicants: widget.userJobs[index].applicants,
+                        applicants:
+                            widget.userJobs[index].applicants as List<PostedBy>,
                       ),
                     ),
-                )
+                  )
                 : Container(),
           ],
         ),

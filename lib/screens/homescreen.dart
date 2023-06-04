@@ -11,6 +11,7 @@ import '../services/jobServices.dart';
 import '../widgets/navDrawer.dart';
 import 'jobDetail.dart';
 import 'newjob.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   UserModel? user;
@@ -29,6 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     FocusManager.instance.primaryFocus?.unfocus();
+    _initPackageInfo();
+    Future.delayed(const Duration(seconds: 5),(){
+      printInfo();
+    });
     super.initState();
   }
 
@@ -36,6 +41,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return MediaQuery.of(context).size.width;
     // print(MediaQuery.of(context).size.height);
+  }
+
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+    installerStore: 'Unknown',
+  );
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+    
+  }
+  
+  Future<void> printInfo() async{
+    print(_packageInfo.appName);
+    print(_packageInfo.version);
+    print(_packageInfo.buildNumber);
   }
 
   @override
