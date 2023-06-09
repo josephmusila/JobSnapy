@@ -14,15 +14,16 @@ class JobService {
     try {
       var response = await http.get(getAllJobsUrl);
       jobs = jobsModelFromJson(response.body);
+      print(response.body);
       return jobs;
     } catch (e) {
-      print(e.toString());
+      print( "eee$e");
       throw e.toString();
     }
   }
 
   Future<dynamic> postJob({
-    required String jobName, required String jobDescription,
+    required String jobName, required String jobDescription,required String qualification,
     required String applicationMethod, required bool verified,
 
     required String postedBy}) async {
@@ -32,6 +33,7 @@ class JobService {
       var response =
           await http.post(Uri.parse("${BaseUrls().baseUrl}jobs/"), body: {
             "application_method":applicationMethod,
+            "qualifications":qualification,
         "posted_by": postedBy,
         "job_name": jobName,
             // "poster":poster,
@@ -57,19 +59,26 @@ class JobService {
         required bool isImage,
         required String poster,
         required String postedBy}) async {
+    print("hello");
     try {
-      var request = http.MultipartRequest(
+
+      var request = await http.MultipartRequest(
           "POST", Uri.parse("${BaseUrls().baseUrl}jobs/"));
 
 
 
       request.fields["verified"] = "true";
       request.fields["isImage"] = "true";
+      request.fields["application_method"] = "image";
+      request.fields["qualifications"] = "image";
+      request.fields["job_description"] = "image";
+      request.fields["job_name"] = "image";
       request.fields["posted_by"] = postedBy;
 
       request.files.add(await http.MultipartFile.fromPath("poster", poster));
 
       var res = await request.send();
+      print(res);
       var response = await http.Response.fromStream(res);
 
       if (response.statusCode == 200) {

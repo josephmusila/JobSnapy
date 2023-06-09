@@ -1,10 +1,15 @@
+import 'package:chunked_uploader/chunked_uploader.dart';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../config/colors.dart';
+import '../config/urls.dart';
 import '../models/userModel.dart';
 import '../services/jobServices.dart';
 import '../widgets/customWidgets.dart';
+import '../widgets/expandTextField.dart';
 import '../widgets/loadingScreen.dart';
 import '../widgets/postRules.dart';
 import '../widgets/snackbar.dart';
@@ -25,11 +30,13 @@ class _AddJobState extends State<AddJob> {
   ScrollController scrollController = ScrollController();
   var jobname = TextEditingController();
   var jobdescription = TextEditingController();
+  var qualification = TextEditingController();
   var applicationMethod = TextEditingController();
   var imageFile;
   JobService jobService = JobService();
   // var jobname = TextEditingController();
   bool isLoading = false;
+  // int wordCount=
 
   final List<Map<String, dynamic>> _items = List.generate(
       10,
@@ -40,6 +47,7 @@ class _AddJobState extends State<AddJob> {
             'isExpanded': false
           });
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,10 +82,10 @@ class _AddJobState extends State<AddJob> {
                     margin: const EdgeInsets.only(top: 0),
                     color: AppColors.whiteColor,
                     padding:
-                        const EdgeInsets.only(top: 40, left: 20, right: 20),
+                        const EdgeInsets.only(top: 10, left: 20, right: 20),
                     height: double.maxFinite,
                     child: ListView(
-                      padding: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 2),
                       // direction: Axis.vertical,
                       children: [
                         Container(
@@ -96,478 +104,340 @@ class _AddJobState extends State<AddJob> {
                                 fontSize: 15),
                           ),
                         ),
-                        imageFile != null?Container(
-                          height: MediaQuery.of(context).size.height*0.6,
-                          child: Column(
-                            children: [
-                              Container(
-                                child:Image.file(imageFile,fit: BoxFit.cover,),
-                              ),
-                              Container(
-                                height: 35,
-                                child: TextButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      isLoading = true;
-                                      print(imageFile);
-                                    });
-                                    Navigator.of(context)
-                                        .pop(true);
-                                    var res = await jobService
-                                        .jobPoster(verified: true, isImage: true, poster: imageFile.path, postedBy: widget.user?.id.toString() as String);
-                                    print(res);
-                                    if (res == 200 ||
-                                        res == 201) {
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                      ScaffoldMessenger.of(
-                                          context)
-                                          .showSnackBar(Utils
-                                          .displayToast(
-                                          "Job Posted",
-                                          Colors
-                                              .green));
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder:
-                                                  (context) {
-                                                return HomeScreen(
-                                                    widget.user);
-                                              }));
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                          context)
-                                          .showSnackBar(Utils
-                                          .displayToast(
-                                          "Unable to Post the Job \nA network error occurred.",
-                                          Colors.pink));
-                                      print("erro");
-                                    }
-                                    Navigator.of(context)
-                                        .pop(true);
-                                    setState(() {
-                                      jobname.text = "";
-                                      jobdescription.text = "";
-                                      applicationMethod.text =
-                                      "";
-                                      isLoading = false;
-                                    });
-                                    print("erro");
-                                  },
-                                  child: const Text(
-                                    "Post",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ) :Card(
-                          color: Colors.transparent,
-                          elevation: 5,
-                          child: Container(
-                            // height: 400,
-                            padding: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: AppColors.whiteColor1,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomTextField(
-                                    labeltext: "Job Name",
-                                    hintText: "job name",
-                                    controller: jobname,
-                                    onchanged: (value) {},
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "please fill in the  field";
-                                      } else if (value.toString().length < 10) {
-                                        return "Please write least 10 characters";
-                                      } else if (value.toString().length > 99) {
-                                        return "Please use less than 100 characters";
-                                      }
-                                      return null;
-                                    },
-                                    hideText: false,
-                                    maxlines: 1,
-                                    textInputType: TextInputType.emailAddress),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomTextField(
-                                    scrollController: scrollController,
-                                    labeltext: "Job Description",
-                                    hintText: "Some description",
-                                    controller: jobdescription,
-                                    onchanged: (value) {},
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "please fill in the  field";
-                                      } else if (value.toString().length < 10) {
-                                        return "Please write least 10 characters";
-                                      } else if (value.toString().length >
-                                          499) {
-                                        return "Please use less than 500 characters";
-                                      }
-                                      return null;
-                                    },
-                                    hideText: false,
-                                    maxlines: 6,
-                                    textInputType: TextInputType.multiline),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomTextField(
-                                    scrollController: scrollController,
-                                    labeltext: "Method of Application",
-                                    hintText: "Method of Application",
-                                    controller: applicationMethod,
-                                    onchanged: (value) {},
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "please fill in the  field";
-                                      } else if (value.toString().length < 10) {
-                                        return "Please write least 10 characters";
-                                      } else if (value.toString().length >
-                                          499) {
-                                        return "Please use less than 500 characters";
-                                      }
-                                      return null;
-                                    },
-                                    hideText: false,
-                                    maxlines: 3,
-                                    textInputType: TextInputType.multiline),
-                                PostRules(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  height: 35,
-                                  width: double.maxFinite,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            AppColors.appPrimaryColor,
+                        imageFile != null
+                            ? Container(
+                                // height:
+                                //     MediaQuery.of(context).size.height * 0.6,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: Image.file(
+                                        imageFile,
+                                        fit: BoxFit.contain,
                                       ),
-                                      onPressed: () async {
-                                        if (_formKey.currentState!.validate()) {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              backgroundColor:
-                                                  AppColors.whiteColor,
-                                              title: const Text(
-                                                "Confirm Details",
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                              content: Container(
-                                                child: Wrap(
-                                                  direction: Axis.vertical,
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      child: const Text(
-                                                        "Name",
-                                                        style: TextStyle(
-                                                            // decoration: TextDecoration.underline,
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: AppColors
-                                                                .appMainColor1),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width*0.6,
-                                                      child: Text(
-                                                        jobname.text,
-                                                        style: const TextStyle(
-                                                            fontSize: 14,
-                                                            color: AppColors
-                                                                .appTextColor1),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "Description",
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                          // decoration: TextDecoration.underline,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .appMainColor1),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width *0.6,
-                                                      child: Text(
-                                                        jobdescription.text,
-                                                        style: const TextStyle(
-                                                            fontSize: 14,
-                                                            color: AppColors
-                                                                .appTextColor1),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "Application Method",
-                                                      style: TextStyle(
-                                                          // decoration: TextDecoration.underline,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .appMainColor1),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width*0.6,
-                                                      child: Text(
-                                                        applicationMethod.text,
-                                                        style: const TextStyle(
-                                                            fontSize: 14,
-                                                            color: AppColors
-                                                                .appTextColor1),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Divider(
-                                                      color: AppColors
-                                                          .appTextColor1,
-                                                      height: 2,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      isLoading = true;
-                                                    });
-                                                    Navigator.of(context)
-                                                        .pop(true);
-                                                    var res = await jobService
-                                                        .postJob(
-                                                      applicationMethod:
-                                                          applicationMethod
-                                                              .text,
-                                                      postedBy: widget.user!.id
-                                                          .toString(),
-                                                      jobName: jobname.text,
-                                                      jobDescription:
-                                                          jobdescription.text,
-                                                      verified:true,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.all(10),
+                                      height: 35,
+                                      width: double.maxFinite,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            isLoading = true;
 
-                                                    );
-                                                    print(res);
-                                                    if (res == 200 ||
-                                                        res == 201) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(Utils
-                                                              .displayToast(
-                                                                  "Job Posted",
-                                                                  Colors
-                                                                      .green));
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
+                                          });
+                                          print(imageFile.path);
+                                          // final dio = Dio(BaseOptions(
+                                          //   baseUrl: "${BaseUrls().baseUrl}jobs/",
+                                          //   // headers: {'Authorization': 'Bearer'},
+                                          //
+                                          // ));
+                                          // final uploader = ChunkedUploader(dio);
+                                          // final response = await uploader.uploadUsingFilePath(
+                                          //   fileName: "poster",
+                                          //   filePath: imageFile.path!,
+                                          //   maxChunkSize: 500000,
+                                          //   path: '/file',
+                                          //   onUploadProgress: (progress) => print(progress),
+                                          // );
+
+                                          var res = await jobService.jobPoster(
+                                              verified: true,
+                                              isImage: true,
+                                              poster: imageFile.path,
+                                              postedBy: widget.user?.id
+                                                  .toString() as String);
+                                          print(res);
+
+                                          if (res == 200 || res == 201) {
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            // Navigator.of(context).pop(true);
+                                            ScaffoldMessenger
+                                                .of(context)
+                                                .showSnackBar(Utils
+                                                .displayToast(
+                                                "Posted.",
+                                                Colors
+                                                    .green));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return HomeScreen(widget.user);
+                                            }));
+                                          } else {
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            ScaffoldMessenger
+                                                .of(context)
+                                                .showSnackBar(Utils
+                                                .displayToast(
+                                                "Unable to Post the Job \nA network error occurred.",
+                                                Colors
+                                                    .pink));
+                                          }
+
+                                        },
+                                        child: const Text(
+                                          "Post",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ):
+                            Card(
+                                color: Colors.transparent,
+                                elevation: 5,
+                                child: Container(
+                                  // height: 400,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                      color: AppColors.whiteColor1,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      CustomTextField(
+                                          labeltext: "Job Name",
+                                          hintText: "job name",
+                                          controller: jobname,
+                                          onchanged: (value) {},
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "please fill in the  field";
+                                            } else if (value.toString().length <
+                                                10) {
+                                              return "Please write least 10 characters";
+                                            } else if (value.toString().length >
+                                                99) {
+                                              return "Please use less than 100 characters";
+                                            }
+                                            return null;
+                                          },
+                                          hideText: false,
+                                          maxlines: 1,
+                                          textInputType:
+                                              TextInputType.emailAddress),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      ExpandinTextField(
+                                          scrollController: scrollController,
+                                          labeltext: "Job Description",
+                                          hintText: "Some description",
+                                          controller: jobdescription,
+                                          onchanged: (value) {},
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "please fill in the  field";
+                                            } else if (value.toString().length <
+                                                10) {
+                                              return "Please write least 10 characters";
+                                            } else if (value.toString().length >
+                                                1000) {
+                                              int wordCount=value.split("").length;
+
+                                              return "Use less than 1000 words.You have used $wordCount";
+                                            }
+                                            return null;
+                                          },
+                                          hideText: false,
+
+                                          textInputType:
+                                              TextInputType.multiline),
+
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      ExpandinTextField(
+                                          scrollController: scrollController,
+                                          labeltext: "Job Qualifications",
+                                          hintText: "Some description",
+                                          controller: qualification,
+                                          onchanged: (value) {},
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "please fill in the  field";
+                                            } else if (value.toString().length <
+                                                10) {
+                                              return "Please write least 10 characters";
+                                            } else if (value.toString().length >
+                                                1000) {
+                                              int wordCount=value.split("").length;
+
+                                              return "Use less than 1000 words.You have used $wordCount";
+                                            }
+                                            return null;
+                                          },
+                                          hideText: false,
+
+                                          textInputType:
+                                          TextInputType.multiline),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      ExpandinTextField(
+                                          scrollController: scrollController,
+                                          labeltext: "Method of Applications",
+                                          hintText: "Some description",
+                                          controller: applicationMethod,
+                                          onchanged: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "please fill in the  field";
+                                            } else if (value.toString().length <
+                                                10) {
+                                              return "Please write least 10 characters";
+                                            } else if (value.toString().length >
+                                                1000) {
+                                              return "Please use less than 1000 characters";
+                                            }
+                                            return null;
+                                          },
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "please fill in the  field";
+                                            } else if (value.toString().length <
+                                                10) {
+                                              return "Please write least 10 characters";
+                                            } else if (value.toString().length >
+                                                1000) {
+                                              int wordCount=value.split("").length;
+
+                                              return "Use less than 1000 words.You have used $wordCount";
+                                            }
+                                            return null;
+                                          },
+                                          hideText: false,
+
+                                          textInputType:
+                                          TextInputType.multiline),
+                                      const PostRules(),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Container(
+                                        height: 35,
+                                        width: double.maxFinite,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  AppColors.appPrimaryColor,
+                                            ),
+                                            onPressed: () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
+
+                                                var res =
+                                                await jobService
+                                                    .postJob(
+                                                  qualification: qualification.text,
+                                                  applicationMethod:
+                                                  applicationMethod
+                                                      .text,
+                                                  postedBy: widget
+                                                      .user!.id
+                                                      .toString(),
+                                                  jobName:
+                                                  jobname.text,
+                                                  jobDescription:
+                                                  jobdescription
+                                                      .text,
+                                                  verified: true,
+                                                );
+                                                print(res);
+                                                if (res == 200 ||
+                                                    res == 201) {
+                                                  setState(() {
+                                                    isLoading=false;
+                                                    jobname.text = "";
+                                                    jobdescription
+                                                        .text = "";
+                                                    applicationMethod
+                                                        .text = "";
+                                                    // ScaffoldMessenger
+                                                    //     .of(context)
+                                                    //     .showSnackBar(Utils
+                                                    //     .displayToast(
+                                                    //     "Job Posted",
+                                                    //     Colors
+                                                    //         .green));
+                                                  });
+                                                  ScaffoldMessenger
+                                                      .of(context)
+                                                      .showSnackBar(Utils
+                                                      .displayToast(
+                                                      "Job Posted",
+                                                      Colors
+                                                          .green));
+                                                  Navigator.of(context)
+                                                      .pop(true);
+                                                  Navigator.of(
+                                                      context)
+                                                      .push(MaterialPageRoute(
+                                                      builder:
+                                                          (context) {
                                                         return HomeScreen(
                                                             widget.user);
                                                       }));
-                                                    } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(Utils
-                                                              .displayToast(
-                                                                  "Unable to Post the Job \nA network error occurred.",
-                                                                  Colors.pink));
-                                                    }
-                                                    Navigator.of(context)
-                                                        .pop(true);
-                                                    setState(() {
-                                                      jobname.text = "";
-                                                      jobdescription.text = "";
-                                                      applicationMethod.text =
-                                                          "";
-                                                      isLoading = false;
-                                                    });
-                                                  },
-                                                  child: const Text(
-                                                    "Post",
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 50,
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(false);
-                                                  },
-                                                  child: const Text(
-                                                    "Cancel",
-                                                    style: TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize: 18),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: const Text("Post")),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  width: double.maxFinite,
-                                  height: 35,
-                                  child: ElevatedButton.icon(
-                                    icon: const Icon(
-                                      Icons.upload,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _getFromGallery();
-                                      });
+                                                } else {
+                                                  ScaffoldMessenger
+                                                      .of(context)
+                                                      .showSnackBar(Utils
+                                                      .displayToast(
+                                                      "Unable to Post the Job \nA network error occurred.",
+                                                      Colors
+                                                          .pink));
+                                                }
 
-                                      // showDialog(
-                                      //   context: context,
-                                      //   builder: (context) => AlertDialog(
-                                      //     backgroundColor:
-                                      //     AppColors.whiteColor,
-                                      //     title: const Text(
-                                      //       "Confirm Poster",
-                                      //       style: TextStyle(
-                                      //           color: Colors.red),
-                                      //     ),
-                                      //     content: Container(
-                                      //       // child:Image.file(imageFile,fit: BoxFit.cover,),
-                                      //       child:Text("hello"),
-                                      //
-                                      //     ),
-                                      //     actions: [
-                                      //       TextButton(
-                                      //         onPressed: () async {
-                                      //           setState(() {
-                                      //             isLoading = true;
-                                      //             print(imageFile);
-                                      //           });
-                                      //           Navigator.of(context)
-                                      //               .pop(true);
-                                      //           var res = await jobService
-                                      //               .jobPoster(verified: true, isImage: true, poster: imageFile.path, postedBy: widget.user?.id.toString() as String);
-                                      //           print(res);
-                                      //           if (res == 200 ||
-                                      //               res == 201) {
-                                      //             setState(() {
-                                      //               isLoading = false;
-                                      //             });
-                                      //             ScaffoldMessenger.of(
-                                      //                 context)
-                                      //                 .showSnackBar(Utils
-                                      //                 .displayToast(
-                                      //                 "Job Posted",
-                                      //                 Colors
-                                      //                     .green));
-                                      //             Navigator.of(context).push(
-                                      //                 MaterialPageRoute(
-                                      //                     builder:
-                                      //                         (context) {
-                                      //                       return HomeScreen(
-                                      //                           widget.user);
-                                      //                     }));
-                                      //           } else {
-                                      //             ScaffoldMessenger.of(
-                                      //                 context)
-                                      //                 .showSnackBar(Utils
-                                      //                 .displayToast(
-                                      //                 "Unable to Post the Job \nA network error occurred.",
-                                      //                 Colors.pink));
-                                      //             print("erro");
-                                      //           }
-                                      //           Navigator.of(context)
-                                      //               .pop(true);
-                                      //           setState(() {
-                                      //             jobname.text = "";
-                                      //             jobdescription.text = "";
-                                      //             applicationMethod.text =
-                                      //             "";
-                                      //             isLoading = false;
-                                      //           });
-                                      //           print("erro");
-                                      //         },
-                                      //         child: const Text(
-                                      //           "Post",
-                                      //           style: TextStyle(
-                                      //             color: Colors.red,
-                                      //             fontSize: 18,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       const SizedBox(
-                                      //         width: 50,
-                                      //       ),
-                                      //       TextButton(
-                                      //         onPressed: () {
-                                      //           Navigator.of(context)
-                                      //               .pop(false);
-                                      //         },
-                                      //         child: const Text(
-                                      //           "Cancel",
-                                      //           style: TextStyle(
-                                      //               color: Colors.green,
-                                      //               fontSize: 18),
-                                      //         ),
-                                      //       )
-                                      //     ],
-                                      //   ),
-                                      // );
-                                    },
-                                    label: const Text("Or Upload a Job Poster"),
+                                              }
+                                            },
+                                            child: const Text("Post")),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Container(
+                                        width: double.maxFinite,
+                                        height: 35,
+                                        child: ElevatedButton.icon(
+                                          icon: const Icon(
+                                            Icons.upload,
+                                          ),
+                                          onPressed: () async {
+                                            // setState(() {
+                                              _getFromGallery();
+                                            // });
+                                            // final file =
+                                            // (await FilePicker.platform.pickFiles(withReadStream: true))!.files.single;
+
+
+                                          },
+                                          label: const Text(
+                                              "Or Upload a Job Poster"),
+                                        ),
+                                      )
+                                    ],
                                   ),
-
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                                ),
+                              ),
                       ],
                     ),
                   ),

@@ -25,7 +25,7 @@ class NavItem extends StatelessWidget {
           ),
         ),
         onTap: () {
-          Navigator.pop(context);
+          // Navigator.pop(context);
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {

@@ -14,6 +14,7 @@ class JobsModel {
     List<PostedBy> applicants;
     String jobName;
     String jobDescription;
+    dynamic qualification;
     String applicationMethod;
     DateTime datePosted;
     bool isImage;
@@ -23,6 +24,7 @@ class JobsModel {
     dynamic poster;
 
     JobsModel({
+
         required this.id,
         required this.postedBy,
         required this.applicants,
@@ -34,6 +36,7 @@ class JobsModel {
         required this.expired,
         required this.verified,
         required this.trending,
+        this.qualification,
         this.poster,
     });
 
@@ -50,6 +53,7 @@ class JobsModel {
         verified: json["verified"],
         trending: json["trending"],
         poster: json["poster"],
+        qualification: json["qualifications"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -65,6 +69,7 @@ class JobsModel {
         "verified": verified,
         "trending": trending,
         "poster": poster,
+        "qualifications":qualification
     };
 }
 

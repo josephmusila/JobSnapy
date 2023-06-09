@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jobsnap/screens/homescreen.dart';
 import 'package:jobsnap/screens/registerPage.dart';
 import 'package:jobsnap/widgets/transitions.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 
 import 'package:upgrader/upgrader.dart';
 
@@ -17,6 +19,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  
+
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {

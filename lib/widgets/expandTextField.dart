@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../config/colors.dart';
 
 
-class CustomTextField extends StatefulWidget {
+class ExpandinTextField extends StatefulWidget {
   String labeltext;
   String hintText;
   TextEditingController controller;
@@ -12,38 +12,39 @@ class CustomTextField extends StatefulWidget {
   bool hideText;
   TextInputType textInputType;
   ScrollController? scrollController;
-  int maxlines;
+
   Widget? suffixIcon;
 
-  CustomTextField(
+  ExpandinTextField(
       {required this.labeltext,
-      required this.hintText,
-      required this.controller,
-      required this.onchanged,
-      required this.validator,
-      required this.hideText,
-      required this.maxlines,
-      this.scrollController,
+        required this.hintText,
+        required this.controller,
+        required this.onchanged,
+        required this.validator,
+        required this.hideText,
+
+        this.scrollController,
         this.suffixIcon,
-      required this.textInputType});
+        required this.textInputType});
 
   @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
+  State<ExpandinTextField> createState() => _ExpandinTextFieldState();
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _ExpandinTextFieldState extends State<ExpandinTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: widget.maxlines,
+
+      autofocus: false,
+      // focusNode: _focusnode,
+      maxLines: null,
+      controller: widget.controller,
       validator: widget.validator,
       onChanged: widget.onchanged,
-      controller: widget.controller,
+      // controller: widget.controller,
       obscureText: widget.hideText,
       keyboardType: widget.textInputType,
-      // expands: true,
-      // minLines: null,
-
       style: const TextStyle(
         color: AppColors.appTextColor1,
       ),
@@ -58,8 +59,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         hintText: widget.hintText,
 
         labelStyle: const TextStyle(
-          color: AppColors.appTextColor1,
-          fontSize: 16
+            color: AppColors.appTextColor1,
+            fontSize: 16
         ),
         hintStyle: const TextStyle(
           color: AppColors.appAccentColor,

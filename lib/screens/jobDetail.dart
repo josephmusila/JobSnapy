@@ -172,6 +172,41 @@ class _JobDetailState extends State<JobDetail> {
                                     const SizedBox(
                                       height: 10,
                                     ),
+                                    widget.job.qualification!=null?const Text(
+                                      "Qualifications",
+                                      style: TextStyle(
+                                        color: AppColors.appTextColor1,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ):Container(),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    widget.job.qualification!=null?Container(
+                                      width: MediaQuery.of(context).size.width >
+                                          500
+                                          ? MediaQuery.of(context).size.width *
+                                          0.4
+                                          : MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: Text(
+                                        widget.job.qualification == null
+                                            ? "Not Provided"
+                                            : widget.job.qualification,
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
+                                        style: const TextStyle(
+                                          height: 1.4,
+                                          fontSize: 14,
+                                          color: AppColors.appTextColor1,
+                                        ),
+                                      ),
+                                    ):Container(),
+
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
                                     const Text(
                                       "Method of Application",
                                       style: TextStyle(

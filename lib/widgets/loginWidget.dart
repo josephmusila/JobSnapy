@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../config/colors.dart';
 import '../models/userModel.dart';
@@ -29,6 +30,25 @@ class _LoginWidgetState extends State<LoginWidget> {
   var password1 = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var hidePassword = true;
+
+  ///persistent authentication
+  ///
+  final _storage = const FlutterSecureStorage();
+  Future<void> _readFromStorage() async {
+    email.text = await _storage.read(key: "KEY_EMAIL") ?? '';
+    password1.text = await _storage.read(key: "KEY_PASSWORD") ?? '';
+    await authService.login(
+      email: email.text,
+      password: password1.text,
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _readFromStorage();
+    super.initState();
+  }
 
 
   @override
@@ -149,6 +169,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     setState(() {
                                       isLoading = false;
                                     });
+                                    await _storage.write(
+                                        key: "KEY_EMAIL", value: email.text);
+                                    await _storage.write(
+                                        key: "KEY_PASSWORD", value: password1.text);
                                     Navigator.pushAndRemoveUntil(
                                         context, MaterialPageRoute(
                                         builder: (context) {

@@ -72,7 +72,7 @@ class _JobsWidgetState extends State<JobsWidget>
                 context,
                 PageRouteBuilder(
                   pageBuilder: (_, __, ___) =>
-                      JobDetail(widget.searched_list[widget.index], widget.user),
+                      JobDetail(widget.searched_list[index], widget.user),
                   transitionDuration: const Duration(milliseconds: 300),
                   transitionsBuilder: (_, a, __, c) => FadeTransition(
                     opacity: a,

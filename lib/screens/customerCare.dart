@@ -110,7 +110,7 @@ class CustomerCare extends StatelessWidget {
                       // var androidUrl = "whatsapp://send?phone=$contact&text=Hello";
                       // var iosUrl = "https://whatsapp://send?phone=$contact&text=Hello";
                       var url =
-                          Uri.parse("https://wa.me/+254745787487?text=Hello");
+                          Uri.parse("https://wa.me/+254751218745?text=Hello");
 
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url,

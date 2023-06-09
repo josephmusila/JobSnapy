@@ -57,10 +57,10 @@ class About extends StatelessWidget {
                 ),
                 AboutWidget(title: "App Version",value: "1.0.3"),
                 AboutWidget(title: "Release Date",value: "20/05/2023"),
-                AboutWidget(title: "Developed At",value: "Proxy Hub KE"),
-                AboutWidget(title: "Website",value: "vivatechy.com"),
+                AboutWidget(title: "Developed At",value: "GenCode"),
+                AboutWidget(title: "Website",value: "jobsnap.vivatechy.com"),
                 AboutWidget(title: "Platform",value: "Android/IOS"),
-
+                AboutWidget(title: "Call",value: "+254745787487"),
               ],
             ),
           ),

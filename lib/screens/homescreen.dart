@@ -1,17 +1,18 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobsnap/models/versionModel.dart';
+import 'package:jobsnap/services/versionService.dart';
 
 
 import '../config/colors.dart';
 import '../cubits/jobs/jobCubits.dart';
 import '../logic/jobsLogic.dart';
-import '../models/jobsModel.dart';
 import '../models/userModel.dart';
 import '../services/jobServices.dart';
-import '../widgets/navDrawer.dart';
-import 'jobDetail.dart';
-import 'newjob.dart';
+import '../widgets/snackbar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   UserModel? user;
@@ -25,23 +26,26 @@ class _HomeScreenState extends State<HomeScreen> {
   var search = TextEditingController();
 
   var items = ["hello", "world"];
+  VersionService versionService = VersionService();
+  late VersionModel versionModel;
+   bool showUpdateCard=false;
 
   @override
   void initState() {
     // TODO: implement initState
     FocusManager.instance.primaryFocus?.unfocus();
     _initPackageInfo();
+
     Future.delayed(const Duration(seconds: 5),(){
-      printInfo();
+
+      checkUpdate();
+      print(_packageInfo.version);
+      // print(versionModel.version);
     });
     super.initState();
   }
 
-  double getSizes(BuildContext context){
 
-    return MediaQuery.of(context).size.width;
-    // print(MediaQuery.of(context).size.height);
-  }
 
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
@@ -59,11 +63,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     
   }
-  
-  Future<void> printInfo() async{
-    print(_packageInfo.appName);
-    print(_packageInfo.version);
-    print(_packageInfo.buildNumber);
+
+
+
+  Future<void> checkUpdate() async{
+    versionModel=await versionService.getUpdates();
+    print(versionModel.version);
+
+    if(versionModel.version != _packageInfo.version){
+      setState(() {
+        showUpdateCard=true;
+      });
+    }else{
+      print("No update available");
+    }
   }
 
   @override
@@ -76,13 +89,75 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.white10,
           height: double.maxFinite,
           width: double.maxFinite,
-          child: Stack(
+          child:  Stack(
             children: [
               // JobList(user),
+
               BlocProvider(
                 create: (context) => JobCubits(jobService: JobService()),
                 child: JobsDataLogicScreen(widget.user),
               ),
+              showUpdateCard?Container(
+                height: double.maxFinite,
+                width: double.maxFinite,
+                color: Colors.white24,
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*0.8,
+                    padding: const EdgeInsets.all(8),
+                    height: 300,
+                    decoration: const BoxDecoration(
+                      color: AppColors.appMainColor2,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Update Available"),
+                            Text("V${versionModel.version}")
+                          ],
+                        ),
+                        const Divider(color: Colors.white,),
+                        const SizedBox(height: 20,),
+                         const Text("Details",style: TextStyle(color: Colors.white),),
+                        const SizedBox(height: 20,),
+                         Text(versionModel.details,style: const TextStyle(color: Colors.white),),
+                        const SizedBox(height: 20,),
+                        const Divider(color: Colors.white,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(onPressed: () async{
+                                    var url = Uri.parse("https://jobsnap.vivatechy.com/api#downloads");
+
+                                    if (await canLaunchUrl(url)) {
+                                      await launchUrl(url);
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        Utils.displayToast("Unable to open download page",
+                                            AppColors.appMainColor2),
+                                      );
+                                    }
+                            }, child: const Text("Update"),),
+                           versionModel.isForcedUpdate? Container():TextButton(onPressed: (){
+                              setState(() {
+                                  setState(() {
+                                    showUpdateCard=false;
+                                  });
+                              });
+                            }, child: const Text("Cancel"),),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ):Container()
             ],
           ),
         ),
