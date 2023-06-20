@@ -16,7 +16,7 @@ class NavItem extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: AppColors.appPrimaryColor,
+          color: AppColors.whiteColor,
         ),
         title: Text(
           title,

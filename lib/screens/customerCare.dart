@@ -102,9 +102,9 @@ class CustomerCare extends StatelessWidget {
                 children: [
                   Expanded(
                       child: ContactsItem(
-                    icon: Icons.whatsapp,
+                    icon: Icons.messenger,
                     color: Colors.green,
-                    description: "24/7 Chat response",
+                    description: "Whatsapp",
                     callback: () async {
                       // var contact = "+254745787487";
                       // var androidUrl = "whatsapp://send?phone=$contact&text=Hello";

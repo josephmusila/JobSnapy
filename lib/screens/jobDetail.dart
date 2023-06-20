@@ -12,6 +12,12 @@ import '../widgets/loadingScreen.dart';
 import '../widgets/navDrawer.dart';
 import '../widgets/snackbar.dart';
 import 'abuseReportScreen.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:linkify/linkify.dart';
+import 'dart:async';
+
+import 'package:url_launcher/url_launcher.dart';
+
 
 class JobDetail extends StatefulWidget {
   JobsModel job;
@@ -59,6 +65,8 @@ class _JobDetailState extends State<JobDetail> {
     }
   }
 
+  // final entries=NativeL
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -102,7 +110,7 @@ class _JobDetailState extends State<JobDetail> {
                     children: [
                       widget.job.isImage
                           ? Container(
-                              height: 300,
+                              // height: 300,
                               color: Colors.red,
                               child: Image.network(
                                 widget.job.poster.toString(),
@@ -158,16 +166,16 @@ class _JobDetailState extends State<JobDetail> {
                                               0.4
                                           : MediaQuery.of(context).size.width *
                                               0.8,
-                                      child: Text(
-                                        widget.job.jobDescription as String,
-                                        softWrap: true,
-                                        overflow: TextOverflow.visible,
-                                        style: const TextStyle(
-                                          height: 1.4,
-                                          fontSize: 14,
-                                          color: AppColors.appTextColor1,
-                                        ),
+                                      child: SelectableLinkify(
+                                        text: widget.job.jobDescription,
+
+                                          style: const TextStyle(
+                                            height: 1.4,
+                                            fontSize: 14,
+                                            color: AppColors.appTextColor1,
+                                          ),
                                       ),
+
                                     ),
                                     const SizedBox(
                                       height: 10,
@@ -190,23 +198,20 @@ class _JobDetailState extends State<JobDetail> {
                                           0.4
                                           : MediaQuery.of(context).size.width *
                                           0.8,
-                                      child: Text(
-                                        widget.job.qualification == null
-                                            ? "Not Provided"
-                                            : widget.job.qualification,
-                                        softWrap: true,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                          height: 1.4,
-                                          fontSize: 14,
-                                          color: AppColors.appTextColor1,
-                                        ),
-                                      ),
+                                      child: SelectableLinkify(text: widget.job.qualification ?? "Not Provided",
+
+                                          style: const TextStyle(
+                                            height: 1.4,
+                                            fontSize: 14,
+                                            color: AppColors.appTextColor1,
+                                          ),),
+
                                     ):Container(),
 
                                     const SizedBox(
                                       height: 10,
                                     ),
+
                                     const Text(
                                       "Method of Application",
                                       style: TextStyle(
@@ -225,19 +230,12 @@ class _JobDetailState extends State<JobDetail> {
                                               0.4
                                           : MediaQuery.of(context).size.width *
                                               0.8,
-                                      child: Text(
-                                        widget.job.applicationMethod == null
-                                            ? "Not Provided"
-                                            : widget.job.applicationMethod
-                                                as String,
-                                        softWrap: true,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                          height: 1.4,
-                                          fontSize: 14,
-                                          color: AppColors.appTextColor1,
-                                        ),
-                                      ),
+                                      child: SelectableLinkify(text:widget.job.applicationMethod ?? "Not Provided",style: const TextStyle(
+                                        height: 1.4,
+                                        fontSize: 14,
+                                        color: AppColors.appTextColor1,
+                                      ), ),
+
                                     ),
                                   ],
                                 ),
@@ -386,7 +384,7 @@ class _JobDetailState extends State<JobDetail> {
                                             ),
                                           ),
                                           actions: [
-                                            Container(
+                                            SizedBox(
                                               width: double.maxFinite,
                                               child: Row(
                                                 mainAxisAlignment:
@@ -570,7 +568,7 @@ class _JobDetailState extends State<JobDetail> {
                                       labeltext: "Comment",
                                       maxlines: 1,
                                       onchanged: (value) {
-                                        if (value.length > 0) {
+                                        if (value.isNotEmpty) {
                                           setState(() {
                                             isPressed = true;
                                           });
@@ -676,7 +674,7 @@ class _JobDetailState extends State<JobDetail> {
                         ),
                       ),
                       isLoading
-                          ? Container(
+                          ? SizedBox(
                               height: 300,
                               width: double.maxFinite,
                               child: LoadingScreen(message: "Posting.."))

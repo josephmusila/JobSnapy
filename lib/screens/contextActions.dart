@@ -40,7 +40,7 @@ class _ContextActionsState extends State<ContextActions> {
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(
-                      Icons.whatsapp,
+                      Icons.phone,
                       color: Colors.green,
                       size: 40,
                     ),

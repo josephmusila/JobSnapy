@@ -22,17 +22,17 @@ class AboutWidget extends StatelessWidget {
               "$title:",
               style: const TextStyle(
                 fontSize: 18,
-                color: AppColors.appTextColor3,
+                color: AppColors.appTextColor1,
               ),
             ),
           ),
           Positioned(
             right: 0,
-            child: Text(
+            child: SelectableText(
               value,
               style: const TextStyle(
                 fontSize: 18,
-                color: Colors.deepOrange,
+                color: AppColors.appPrimaryColor,
               ),
             ),
           ),

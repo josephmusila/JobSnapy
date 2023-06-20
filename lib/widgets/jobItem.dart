@@ -45,7 +45,7 @@ class _JobItemState extends State<JobItem> {
   Widget build(BuildContext context) {
     return TweenAnimationBuilder(
         curve: Curves.decelerate,
-        duration: Duration(milliseconds: (widget.index + 1) * 200),
+        duration: Duration(milliseconds: (widget.index * 10) + 200),
         tween: Tween(begin: -10, end: 0.5),
         builder: (context, value, child) {
           return Transform.translate(
@@ -55,8 +55,8 @@ class _JobItemState extends State<JobItem> {
               margin:
               const EdgeInsets.symmetric(horizontal: 5),
               child: Card(
-                elevation: 1,
-                color: Colors.transparent,
+                elevation: 3,
+                color: Colors.white,
                 child: InkWell(
                   onTap: widget.callback,
                   // onTap: () {
@@ -84,9 +84,9 @@ class _JobItemState extends State<JobItem> {
                       border:
                       Border.all(color: Colors.white, width: 0.9),
                       color: widget.color,
-                      // borderRadius: const BorderRadius.all(
-                      //   Radius.circular(10),
-                      // ),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
                     ),
                     // margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     padding:
@@ -129,18 +129,18 @@ class _JobItemState extends State<JobItem> {
                               MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.searched_list[widget.index].jobName as String,
+                                  widget.searched_list[widget.index].jobName,
                                   overflow: TextOverflow.ellipsis,
                                   // softWrap: false,
                                   maxLines: 1,
                                   style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.appTextColor1,
-                                      fontWeight: FontWeight.w500),
+                                      fontWeight: FontWeight.w400),
                                 ),
                                 Text(
                                   widget.searched_list[widget.index]
-                                      .jobDescription as String,
+                                      .jobDescription,
                                   overflow: TextOverflow.ellipsis,
                                   // softWrap: true,
                                   maxLines: 3,
@@ -159,7 +159,7 @@ class _JobItemState extends State<JobItem> {
                                       decoration:  BoxDecoration(
                                           color: AppColors.whiteColor.withOpacity(0.2),
                                           borderRadius:
-                                          BorderRadius.all(
+                                          const BorderRadius.all(
                                               Radius.circular(
                                                   8))),
                                       child: Text(

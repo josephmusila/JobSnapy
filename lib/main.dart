@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       darkTheme: ThemeData(brightness: Brightness.dark),
       theme: ThemeData(
-        pageTransitionsTheme: PageTransitionsTheme(builders: {TargetPlatform.android:CustomPageTransitionBuilder()}),
+        // pageTransitionsTheme: PageTransitionsTheme(builders: {TargetPlatform.android:CustomPageTransitionBuilder()}),
         brightness: Brightness.light,
-        accentColor: AppColors.appPrimaryColor,
+        // accentColor: AppColors.appPrimaryColor,
         backgroundColor: AppColors.appMainColor2,
         primarySwatch: Colors.deepPurple,
       ),

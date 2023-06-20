@@ -88,9 +88,10 @@ class _JobListState extends State<JobList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawer(widget.user),
+      drawer: NavDrawer(widget.user),
       backgroundColor: AppColors.whiteColor,
       floatingActionButton: FloatingActionButton.extended(
+        
           backgroundColor: AppColors.appMainColor1,
           foregroundColor: Colors.black,
           splashColor: Colors.deepOrange,
@@ -98,17 +99,17 @@ class _JobListState extends State<JobList> {
           elevation: 5,
           onPressed: () {
             if (widget.user == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    "Login First to Post a Job",
-                    style: TextStyle(color: AppColors.appTextColor3),
-                  ),
-                  backgroundColor: AppColors.appPrimaryColor,
-                  dismissDirection: DismissDirection.horizontal,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   const SnackBar(
+              //     content: Text(
+              //       "Login First to Post a Job",
+              //       style: TextStyle(color: AppColors.appTextColor3),
+              //     ),
+              //     backgroundColor: AppColors.appPrimaryColor,
+              //     dismissDirection: DismissDirection.horizontal,
+              //     behavior: SnackBarBehavior.floating,
+              //   ),
+              // );
               showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -222,8 +223,8 @@ class _JobListState extends State<JobList> {
                     "JobSnap",
                     style: TextStyle(
                       fontSize: 25,
-                      color: AppColors.appPrimaryColor,
-                      fontWeight: FontWeight.bold,
+                      color: AppColors.whiteColor,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                   bottom: PreferredSize(
@@ -361,11 +362,11 @@ class _JobListState extends State<JobList> {
                         ),
                     height: 100,
                     width: double.maxFinite,
-                    child: Center(
+                    child: const Center(
                       child: Column(
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Divider(
                             height: 2,
                             color: AppColors.appPrimaryColor,

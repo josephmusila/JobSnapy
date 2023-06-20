@@ -7,6 +7,7 @@ import '../cubits/Notifications/notificationCubit.dart';
 import '../logic/adsSliderLogic.dart';
 import '../services/notificationService.dart';
 import '../widgets/adsSlider.dart';
+import '../widgets/quotesWidget.dart';
 
 class JobLoadingSkeleton extends StatefulWidget {
   const JobLoadingSkeleton({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawer(),
+      drawer: NavDrawer(),
       appBar: AppBar(
         backgroundColor: AppColors.appMainColor2,
         title: const Text(
@@ -59,18 +60,17 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors:  [
-                        AppColors.appMainColor2,
-                        // AppColors.appMainColor2.withOpacity(0.2),
-                        AppColors.appMainColor2,
-                        Color.fromARGB(173, 20, 20, 50),
-                        Colors.white,
-                        Colors.white
-                      ]
-                  )
-              ),
+                      colors: [
+                    AppColors.appMainColor2,
+                    // AppColors.appMainColor2.withOpacity(0.2),
+                    AppColors.appMainColor2,
+                    Color.fromARGB(173, 20, 20, 50),
+                    Colors.white,
+                    Colors.white
+                  ])),
               child: BlocProvider(
-                create: (context) => NotificationsCubit(notificationService: NotificationService()),
+                create: (context) => NotificationsCubit(
+                    notificationService: NotificationService()),
                 child: AdSliderLogic(),
               ),
             ),
@@ -82,81 +82,92 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                     curve: Curves.ease,
                     duration: Duration(seconds: index * 1),
                     builder: (context, double opacity, child) {
-                      return AnimatedOpacity(
-                        opacity: animationController.value,
-                        duration: Duration(milliseconds: (index + 2) * 100),
-                        onEnd:(){
-                          opacity=0;
-                        },
-                        curve: Curves.linear,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.black12, width: 0.9),
-                            color: AppColors.whiteColor,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          height: 130,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: CircleAvatar(
-                                  backgroundColor: AppColors.appTextColor2
-                                      .withOpacity(0.5),
-                                  radius: 25,
-                                  // child: Text(
-                                  //   "",
-                                  // ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  // margin: const EdgeInsets.symmetric(vertical: 5),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 10,bottom: 5),
-                                        height: 20,
-                                        width: double.maxFinite,
-                                        color: Colors.white,
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 10,bottom: 5),
-                                        height: 50,
-                                        width: double.maxFinite,
-                                        color: Colors.white,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            width:200,
-                                            height: 20,
-                                            // margin: const EdgeInsets.only(bottom:3),
-                                            decoration: const BoxDecoration(
-                                                color: AppColors.whiteColor1,
-                                                borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(8))),
-
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                      return index == 0?
+                      QuotesWidget()
+                
+                          : AnimatedOpacity(
+                              opacity: animationController.value,
+                              duration:
+                                  Duration(milliseconds: (index + 2) * 100),
+                              onEnd: () {
+                                opacity = 0;
+                              },
+                              curve: Curves.linear,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.black12, width: 0.9),
+                                  color: AppColors.whiteColor,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(5),
                                   ),
                                 ),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                height: 130,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: CircleAvatar(
+                                        backgroundColor: AppColors.appTextColor2
+                                            .withOpacity(0.5),
+                                        radius: 25,
+                                        // child: Text(
+                                        //   "",
+                                        // ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Container(
+                                        // margin: const EdgeInsets.symmetric(vertical: 5),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10, bottom: 5),
+                                              height: 20,
+                                              width: double.maxFinite,
+                                              color: Colors.white,
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10, bottom: 5),
+                                              height: 50,
+                                              width: double.maxFinite,
+                                              color: Colors.white,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  width: 200,
+                                                  height: 20,
+                                                  // margin: const EdgeInsets.only(bottom:3),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: AppColors
+                                                              .whiteColor1,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          8))),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
+                            );
                     }),
               ),
             ),

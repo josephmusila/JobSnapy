@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/cli_commands.dart';
+import 'package:jobsnap/screens/chatScreen.dart';
 import 'package:jobsnap/widgets/topShape.dart';
 
 import '../config/colors.dart';
@@ -16,10 +17,10 @@ import '../screens/registerPage.dart';
 import '../services/abuseReport.dart';
 import 'navItem.dart';
 
-class NavigationDrawer extends StatelessWidget {
+class NavDrawer extends StatelessWidget {
   UserModel? user;
 
-  NavigationDrawer([this.user]);
+  NavDrawer([this.user]);
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -65,6 +66,8 @@ class NavigationDrawer extends StatelessWidget {
                   ],
                 ),
               ),
+
+
 
               NavItem(
                 title: "Home",

@@ -49,9 +49,10 @@ dependencies:
   image_picker: ^0.8.7+5
   package_info_plus: ^3.1.2
   flutter_secure_storage: ^8.0.0
-  chunked_uploader: ^1.0.0
+
   file_picker: ^5.2.5
-  dio: ^4.0.6
+
+  flutter_linkify: ^6.0.0
   # google_mobile_ads: ^1.2.0
 
   
@@ -86,6 +87,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   assets:

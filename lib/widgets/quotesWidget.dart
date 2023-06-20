@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:jobsnap/config/colors.dart';
 
 
 import '../config/quotes.dart';
@@ -19,6 +20,7 @@ class QuotesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: AppColors.appMainColor2,
       height: 60,
       child: AnimatedTextKit(
         animatedTexts:List.generate(messages.length, (index) {
@@ -26,7 +28,7 @@ class QuotesWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               textStyle:const TextStyle(
             fontSize: 16,
-            color: Colors.white,
+            color: Color.fromARGB(255, 236, 233, 233),
             fontWeight: FontWeight.w400,
           ));
         }),

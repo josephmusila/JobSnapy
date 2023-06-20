@@ -1,5 +1,4 @@
-import 'package:chunked_uploader/chunked_uploader.dart';
-import 'package:dio/dio.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

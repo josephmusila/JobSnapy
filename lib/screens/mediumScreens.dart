@@ -57,7 +57,7 @@ class _MediumScreenState extends State<MediumScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawer(),
+      drawer: NavDrawer(),
       appBar: AppBar(
         actions: [
           Padding(
