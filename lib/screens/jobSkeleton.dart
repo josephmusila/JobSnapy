@@ -74,6 +74,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                 child: AdSliderLogic(),
               ),
             ),
+            QuotesWidget(),
             Column(
               children: List.generate(
                 10,
@@ -82,10 +83,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                     curve: Curves.ease,
                     duration: Duration(seconds: index * 1),
                     builder: (context, double opacity, child) {
-                      return index == 0?
-                      QuotesWidget()
-                
-                          : AnimatedOpacity(
+                      return AnimatedOpacity(
                               opacity: animationController.value,
                               duration:
                                   Duration(milliseconds: (index + 2) * 100),
@@ -106,7 +104,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                                     vertical: 5, horizontal: 5),
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
-                                height: 130,
+                                height: 120,
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -136,7 +134,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                                             Container(
                                               margin: const EdgeInsets.only(
                                                   top: 10, bottom: 5),
-                                              height: 50,
+                                              height: 40,
                                               width: double.maxFinite,
                                               color: Colors.white,
                                             ),
