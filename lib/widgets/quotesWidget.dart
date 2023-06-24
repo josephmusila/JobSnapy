@@ -20,6 +20,7 @@ class QuotesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       color: AppColors.appMainColor2,
       height: 60,
       child: AnimatedTextKit(

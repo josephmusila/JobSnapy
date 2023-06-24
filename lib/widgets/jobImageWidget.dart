@@ -47,37 +47,74 @@ class JobImageWidget extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        color: AppColors.whiteColor1,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          height: 100,
-          width: double.maxFinite,
-          child: Row(
-            children: [
-              Container(
-                width: 100,
-                child: Image.network(
-                  jobsModel.poster as String,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Posted By: ${jobsModel.postedBy.firstName} ${jobsModel.postedBy.lastName}",
-                      style: const TextStyle(color: AppColors.appTextColor1,fontWeight: FontWeight.bold),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10,),
+        child: Card(
+          color: AppColors.whiteColor1,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            height: 150,
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: CircleAvatar(
+                      backgroundColor: user == null
+                          ? AppColors.appTextColor2
+                          .withOpacity(0.1)
+                          : user!.id ==
+                          jobsModel
+                              .postedBy.id
+                          ? AppColors.appPrimaryColor
+                          .withOpacity(0.5)
+                          : AppColors.appTextColor2
+                          .withOpacity(0.5),
+                      radius: 25,
+                      child: Text(
+                        "${jobsModel.id}",
+                        style: const TextStyle(
+                          color: AppColors.appTextColor1,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    Text(
-                      checkTime(jobsModel.datePosted,), style: const TextStyle(color: AppColors.appMainColor2,fontWeight: FontWeight.w400),
-                    ),
-                  ],
+                  ),
                 ),
-              )
-            ],
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    width: 100,
+                    child: Image.network(
+                      jobsModel.poster as String,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "${jobsModel.postedBy.firstName} ${jobsModel.postedBy.lastName}",
+                        style: const TextStyle(color: AppColors.appTextColor1,fontWeight: FontWeight.bold),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(left: 5),
+                        color: AppColors.whiteColor,
+                        child: Text(
+                          checkTime(jobsModel.datePosted,), style: const TextStyle(color: AppColors.appMainColor2,fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

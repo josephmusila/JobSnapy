@@ -92,7 +92,7 @@ class _JobItemState extends State<JobItem> {
                     padding:
                     const EdgeInsets.symmetric(horizontal: 5),
 
-                    height: 120,
+                    height: 125,
                     child: Row(
                       children: [
                         Expanded(
@@ -155,7 +155,7 @@ class _JobItemState extends State<JobItem> {
                                   children: [
                                     Container(
                                       padding:
-                                      const EdgeInsets.all(8),
+                                      const EdgeInsets.all(5),
                                       decoration:  BoxDecoration(
                                           color: AppColors.whiteColor.withOpacity(0.2),
                                           borderRadius:
@@ -167,7 +167,7 @@ class _JobItemState extends State<JobItem> {
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color:
-                                          AppColors.appTextColor2,
+                                          AppColors.appPrimaryColor,
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),

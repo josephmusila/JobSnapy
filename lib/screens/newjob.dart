@@ -1,4 +1,3 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +31,11 @@ class _AddJobState extends State<AddJob> {
   var qualification = TextEditingController();
   var applicationMethod = TextEditingController();
   var imageFile;
+
+  var qualificationWordCount = 0;
+  var descriptionWordCount = 0;
+  var applicationWordCount = 0;
+
   JobService jobService = JobService();
   // var jobname = TextEditingController();
   bool isLoading = false;
@@ -123,7 +127,6 @@ class _AddJobState extends State<AddJob> {
                                         onPressed: () async {
                                           setState(() {
                                             isLoading = true;
-
                                           });
                                           print(imageFile.path);
                                           // final dio = Dio(BaseOptions(
@@ -153,13 +156,11 @@ class _AddJobState extends State<AddJob> {
                                               isLoading = false;
                                             });
                                             // Navigator.of(context).pop(true);
-                                            ScaffoldMessenger
-                                                .of(context)
-                                                .showSnackBar(Utils
-                                                .displayToast(
-                                                "Posted.",
-                                                Colors
-                                                    .green));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                                    Utils.displayToast(
+                                                        "Posted.",
+                                                        Colors.green));
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) {
@@ -169,15 +170,11 @@ class _AddJobState extends State<AddJob> {
                                             setState(() {
                                               isLoading = false;
                                             });
-                                            ScaffoldMessenger
-                                                .of(context)
-                                                .showSnackBar(Utils
-                                                .displayToast(
-                                                "Unable to Post the Job \nA network error occurred.",
-                                                Colors
-                                                    .pink));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(Utils.displayToast(
+                                                    "Unable to Post the Job \nA network error occurred.",
+                                                    Colors.pink));
                                           }
-
                                         },
                                         child: const Text(
                                           "Post",
@@ -190,8 +187,8 @@ class _AddJobState extends State<AddJob> {
                                     )
                                   ],
                                 ),
-                              ):
-                            Card(
+                              )
+                            : Card(
                                 color: Colors.transparent,
                                 elevation: 5,
                                 child: Container(
@@ -236,7 +233,12 @@ class _AddJobState extends State<AddJob> {
                                           labeltext: "Job Description",
                                           hintText: "Some description",
                                           controller: jobdescription,
-                                          onchanged: (value) {},
+                                          onchanged: (value) {
+                                            var count = value.split("");
+                                            descriptionWordCount = count.length;
+
+                                            setState(() {});
+                                          },
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
@@ -246,17 +248,26 @@ class _AddJobState extends State<AddJob> {
                                               return "Please write least 10 characters";
                                             } else if (value.toString().length >
                                                 1000) {
-                                              int wordCount=value.split("").length;
+                                              int wordCount =
+                                                  value.split("").length;
 
-                                              return "Use less than 1000 words.You have used $wordCount";
+                                              return "Use less than 1000 characters.You have used $wordCount";
                                             }
                                             return null;
                                           },
                                           hideText: false,
-
                                           textInputType:
                                               TextInputType.multiline),
-
+                                      Container(
+                                        width: double.maxFinite,
+                                        height: 20,
+                                        child: Text(
+                                          "$descriptionWordCount/1000",
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(
+                                              color: AppColors.appTextColor2),
+                                        ),
+                                      ),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -265,7 +276,13 @@ class _AddJobState extends State<AddJob> {
                                           labeltext: "Job Qualifications",
                                           hintText: "Some description",
                                           controller: qualification,
-                                          onchanged: (value) {},
+                                          onchanged: (value) {
+                                            var count = value.split("");
+                                            qualificationWordCount =
+                                                count.length;
+
+                                            setState(() {});
+                                          },
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
@@ -275,36 +292,38 @@ class _AddJobState extends State<AddJob> {
                                               return "Please write least 10 characters";
                                             } else if (value.toString().length >
                                                 1000) {
-                                              int wordCount=value.split("").length;
+                                              int wordCount =
+                                                  value.split("").length;
 
-                                              return "Use less than 1000 words.You have used $wordCount";
+                                              return "Use less than 1000 characters.You have used $wordCount";
                                             }
                                             return null;
                                           },
                                           hideText: false,
-
                                           textInputType:
-                                          TextInputType.multiline),
+                                              TextInputType.multiline),
+                                      Container(
+                                        width: double.maxFinite,
+                                        height: 20,
+                                        child: Text(
+                                          "$qualificationWordCount/1000",
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(
+                                              color: AppColors.appTextColor2),
+                                        ),
+                                      ),
                                       const SizedBox(
                                         height: 10,
                                       ),
                                       ExpandinTextField(
                                           scrollController: scrollController,
-                                          labeltext: "Method of Applications",
+                                          labeltext: "Method of Application",
                                           hintText: "Some description",
                                           controller: applicationMethod,
                                           onchanged: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "please fill in the  field";
-                                            } else if (value.toString().length <
-                                                10) {
-                                              return "Please write least 10 characters";
-                                            } else if (value.toString().length >
-                                                1000) {
-                                              return "Please use less than 1000 characters";
-                                            }
-                                            return null;
+                                            var count = value.split("");
+                                            applicationWordCount = count.length;
+                                            setState(() {});
                                           },
                                           validator: (value) {
                                             if (value == null ||
@@ -315,16 +334,26 @@ class _AddJobState extends State<AddJob> {
                                               return "Please write least 10 characters";
                                             } else if (value.toString().length >
                                                 1000) {
-                                              int wordCount=value.split("").length;
+                                              int wordCount =
+                                                  value.split("").length;
 
-                                              return "Use less than 1000 words.You have used $wordCount";
+                                              return "Use less than 1000 characters.You have used $wordCount";
                                             }
                                             return null;
                                           },
                                           hideText: false,
-
                                           textInputType:
-                                          TextInputType.multiline),
+                                              TextInputType.multiline),
+                                      Container(
+                                        width: double.maxFinite,
+                                        height: 20,
+                                        child: Text(
+                                          "$applicationWordCount/1000",
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(
+                                              color: AppColors.appTextColor2),
+                                        ),
+                                      ),
                                       const PostRules(),
                                       const SizedBox(
                                         height: 20,
@@ -345,32 +374,25 @@ class _AddJobState extends State<AddJob> {
                                                 });
 
                                                 var res =
-                                                await jobService
-                                                    .postJob(
-                                                  qualification: qualification.text,
+                                                    await jobService.postJob(
+                                                  qualification:
+                                                      qualification.text,
                                                   applicationMethod:
-                                                  applicationMethod
-                                                      .text,
-                                                  postedBy: widget
-                                                      .user!.id
+                                                      applicationMethod.text,
+                                                  postedBy: widget.user!.id
                                                       .toString(),
-                                                  jobName:
-                                                  jobname.text,
+                                                  jobName: jobname.text,
                                                   jobDescription:
-                                                  jobdescription
-                                                      .text,
+                                                      jobdescription.text,
                                                   verified: true,
                                                 );
                                                 print(res);
-                                                if (res == 200 ||
-                                                    res == 201) {
+                                                if (res == 200 || res == 201) {
                                                   setState(() {
-                                                    isLoading=false;
+                                                    isLoading = false;
                                                     jobname.text = "";
-                                                    jobdescription
-                                                        .text = "";
-                                                    applicationMethod
-                                                        .text = "";
+                                                    jobdescription.text = "";
+                                                    applicationMethod.text = "";
                                                     // ScaffoldMessenger
                                                     //     .of(context)
                                                     //     .showSnackBar(Utils
@@ -379,33 +401,26 @@ class _AddJobState extends State<AddJob> {
                                                     //     Colors
                                                     //         .green));
                                                   });
-                                                  ScaffoldMessenger
-                                                      .of(context)
-                                                      .showSnackBar(Utils
-                                                      .displayToast(
-                                                      "Job Posted",
-                                                      Colors
-                                                          .green));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          Utils.displayToast(
+                                                              "Job Posted",
+                                                              Colors.green));
                                                   Navigator.of(context)
                                                       .pop(true);
-                                                  Navigator.of(
-                                                      context)
-                                                      .push(MaterialPageRoute(
-                                                      builder:
-                                                          (context) {
-                                                        return HomeScreen(
-                                                            widget.user);
-                                                      }));
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return HomeScreen(
+                                                        widget.user);
+                                                  }));
                                                 } else {
-                                                  ScaffoldMessenger
-                                                      .of(context)
-                                                      .showSnackBar(Utils
-                                                      .displayToast(
-                                                      "Unable to Post the Job \nA network error occurred.",
-                                                      Colors
-                                                          .pink));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          Utils.displayToast(
+                                                              "Unable to Post the Job \nA network error occurred.",
+                                                              Colors.pink));
                                                 }
-
                                               }
                                             },
                                             child: const Text("Post")),
@@ -422,12 +437,10 @@ class _AddJobState extends State<AddJob> {
                                           ),
                                           onPressed: () async {
                                             // setState(() {
-                                              _getFromGallery();
+                                            _getFromGallery();
                                             // });
                                             // final file =
                                             // (await FilePicker.platform.pickFiles(withReadStream: true))!.files.single;
-
-
                                           },
                                           label: const Text(
                                               "Or Upload a Job Poster"),

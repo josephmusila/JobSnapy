@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobsnap/screens/jobSkeleton.dart';
 
-
-
 import '../config/colors.dart';
 import '../cubits/jobs/jobCubits.dart';
 import '../models/userModel.dart';
@@ -43,14 +41,13 @@ class _JobsDataLogicScreenState extends State<JobsDataLogicScreen> {
         if (state is JobsLoadedState) {
           return JobList(state.data, widget.user);
           // return JobLoadingSkeleton();
-        // }
-        // if (state is JobsDataError) {
-        //   return ErrorScreen(error: state.message);
-        }if (state is NoJobsState){
-        return ErrorScreen(error: "No Jobs Posted Yet");
+          // }
+          // if (state is JobsDataError) {
+          //   return ErrorScreen(error: state.message);
         }
-
-        else {
+        if (state is NoJobsState) {
+          return ErrorScreen(error: "No Jobs Posted Yet");
+        } else {
           return Container(
             height: double.maxFinite,
             width: double.maxFinite,
@@ -67,10 +64,23 @@ class _JobsDataLogicScreenState extends State<JobsDataLogicScreen> {
                     ),
                   ),
                 ),
-                child: const Center(
-                  child: Text(
-                    "Network is Unreachable",
-                    style: TextStyle(color: Colors.pink, fontSize: 18),
+                child: Center(
+                  child: Container(
+                    height: 150,
+                    // width: 150,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Network is Unreachable",
+                          style: TextStyle(color: Colors.pink, fontSize: 18),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              BlocProvider.of<JobCubits>(context).getAllJobs();
+                            }, child: const Text("Retry"))
+                      ],
+                    ),
                   ),
                 ),
               ),

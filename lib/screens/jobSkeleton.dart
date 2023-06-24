@@ -40,6 +40,22 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.appMainColor1,
+        foregroundColor: Colors.black,
+        splashColor: Colors.deepOrange,
+        hoverElevation: 5,
+        elevation: 5,
+        onPressed: () {},
+        icon: const Icon(
+          Icons.network_check,
+          color: AppColors.appTextColor3,
+        ),
+        label: const Text(
+          "Connecting...",
+          style: TextStyle(color: AppColors.appTextColor3),
+        ),
+      ),
       drawer: NavDrawer(),
       appBar: AppBar(
         backgroundColor: AppColors.appMainColor2,
@@ -81,91 +97,86 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                 (index) => TweenAnimationBuilder(
                     tween: Tween<double>(begin: 0.0, end: 1.0),
                     curve: Curves.ease,
-                    duration: Duration(seconds: index * 1),
+                    duration: Duration(seconds: index * 10),
                     builder: (context, double opacity, child) {
                       return AnimatedOpacity(
-                              opacity: animationController.value,
-                              duration:
-                                  Duration(milliseconds: (index + 2) * 100),
-                              onEnd: () {
-                                opacity = 0;
-                              },
-                              curve: Curves.linear,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.black12, width: 0.9),
-                                  color: AppColors.whiteColor,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
+                        opacity: animationController.value,
+                        duration: Duration(milliseconds: (index + 2) * 100),
+                        onEnd: () {
+                          opacity = 0;
+                        },
+                        curve: Curves.linear,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black12, width: 0.9),
+                            color: AppColors.whiteColor,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          height: 120,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      AppColors.appTextColor2.withOpacity(0.5),
+                                  radius: 25,
+                                  child: const CircularProgressIndicator(
+                                    color: AppColors.appPrimaryColor,
+                                    strokeWidth: 7,
+                                    backgroundColor: AppColors.appMainColor2,
                                   ),
                                 ),
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                height: 120,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: CircleAvatar(
-                                        backgroundColor: AppColors.appTextColor2
-                                            .withOpacity(0.5),
-                                        radius: 25,
-                                        // child: Text(
-                                        //   "",
-                                        // ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  // margin: const EdgeInsets.symmetric(vertical: 5),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 10, bottom: 5),
+                                        height: 20,
+                                        width: double.maxFinite,
+                                        color: Colors.white,
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 4,
-                                      child: Container(
-                                        // margin: const EdgeInsets.symmetric(vertical: 5),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10, bottom: 5),
-                                              height: 20,
-                                              width: double.maxFinite,
-                                              color: Colors.white,
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10, bottom: 5),
-                                              height: 40,
-                                              width: double.maxFinite,
-                                              color: Colors.white,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Container(
-                                                  width: 200,
-                                                  height: 20,
-                                                  // margin: const EdgeInsets.only(bottom:3),
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                          color: AppColors
-                                                              .whiteColor1,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          8))),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 10, bottom: 5),
+                                        height: 40,
+                                        width: double.maxFinite,
+                                        color: Colors.white,
                                       ),
-                                    ),
-                                  ],
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            width: 200,
+                                            height: 20,
+                                            // margin: const EdgeInsets.only(bottom:3),
+                                            decoration: const BoxDecoration(
+                                                color: AppColors.whiteColor1,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            );
+                            ],
+                          ),
+                        ),
+                      );
                     }),
               ),
             ),
