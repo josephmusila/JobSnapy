@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../ads/bannerAd.dart';
 import '../config/colors.dart';
 import '../cubits/comments/commentsCubits.dart';
 import '../logic/commentsSectionLogic.dart';
@@ -8,6 +9,7 @@ import '../models/jobsModel.dart';
 import '../models/userModel.dart';
 import '../services/jobServices.dart';
 import '../widgets/customWidgets.dart';
+import '../widgets/googleads.dart';
 import '../widgets/loadingScreen.dart';
 import '../widgets/navDrawer.dart';
 import '../widgets/snackbar.dart';
@@ -72,6 +74,7 @@ class _JobDetailState extends State<JobDetail> {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
+        bottomNavigationBar: GoogleAdBannner(),
         backgroundColor: AppColors.appMainColor2,
         appBar: AppBar(
                 leading: IconButton(
@@ -180,6 +183,12 @@ class _JobDetailState extends State<JobDetail> {
                                     const SizedBox(
                                       height: 10,
                                     ),
+                                    GoogleAdBannner(),
+                                    // BannerAdWidget(),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    // const BannerAdWidget(),
                                     widget.job.qualification!=null?const Text(
                                       "Qualifications",
                                       style: TextStyle(
@@ -188,6 +197,7 @@ class _JobDetailState extends State<JobDetail> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ):Container(),
+
                                     const SizedBox(
                                       height: 3,
                                     ),
@@ -230,17 +240,46 @@ class _JobDetailState extends State<JobDetail> {
                                               0.4
                                           : MediaQuery.of(context).size.width *
                                               0.8,
-                                      child: SelectableLinkify(text:widget.job.applicationMethod ?? "Not Provided",style: const TextStyle(
+                                      child: SelectableLinkify(
+                                        onOpen: (link) async{
+                                          var url = Uri.parse(link.url);
+
+                                          if (await canLaunchUrl(url)) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              Utils.displayToast(
+                                                  "Opening ${link.url} in default app",
+                                                  Colors.green),
+                                            );
+                                          await launchUrl(url,mode: LaunchMode.externalApplication);
+                                          } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                          Utils.displayToast(
+                                          "Unable to open ${link.url}",
+                                          AppColors.appPrimaryColor),
+                                          );
+                                          }
+                                        },
+                                        onTap: () async{
+
+                                        },
+                                        text:widget.job.applicationMethod ?? "Not Provided",style: const TextStyle(
                                         height: 1.4,
                                         fontSize: 14,
                                         color: AppColors.appTextColor1,
                                       ), ),
 
                                     ),
+                                    const SizedBox(height: 10,),
+                                    GoogleAdBannner(),
+                                    const SizedBox(height: 10,),
+
                                   ],
                                 ),
                               ),
                             ),
+
                       Container(
                         height: 200,
                         width: double.maxFinite,

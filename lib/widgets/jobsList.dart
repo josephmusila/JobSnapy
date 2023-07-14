@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobsnap/ads/bannerAd.dart';
 import 'package:jobsnap/cubits/Notifications/notificationCubit.dart';
 import 'package:jobsnap/services/notificationService.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 import '../ad_helper.dart';
 import '../config/colors.dart';
@@ -21,7 +23,7 @@ import 'errorScreen.dart';
 import 'jobWidget.dart';
 import 'loginWidget.dart';
 import 'navDrawer.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class JobList extends StatefulWidget {
   List<JobsModel> jobs;
@@ -35,34 +37,17 @@ class JobList extends StatefulWidget {
 
 class _JobListState extends State<JobList> {
   var search = TextEditingController();
-  // BannerAd? _bannerAd;
 
 
   //used searched_list in widgets for it to respond to search method
   List<JobsModel> searched_list = [];
   @override
   void initState() {
-    //  _initGoogleMobileAds();
+
+    // initBannerAd();
     searched_list = widget.jobs;
-
-  //   BannerAd(
-  //   adUnitId: AdHelper.bannerAdUnitId,
-  //   request: AdRequest(),
-  //   size: AdSize.banner,
-  //   listener: BannerAdListener(
-  //     onAdLoaded: (ad) {
-  //       setState(() {
-  //         _bannerAd = ad as BannerAd;
-  //       });
-  //     },
-  //     onAdFailedToLoad: (ad, err) {
-  //       print('Failed to load a banner ad: ${err.message}');
-  //       ad.dispose();
-  //     },
-  //   ),
-  // ).load();
-
-
+    
+    // UnityAds.init(gameId: "5325822");
     super.initState();
   }
 
@@ -72,22 +57,13 @@ class _JobListState extends State<JobList> {
     // print(MediaQuery.of(context).size.height);
   }
 
-//   @override
-// void dispose() {
-//   // TODO: Dispose a BannerAd object
-//   _bannerAd?.dispose();
-//   super.dispose();
-// }
 
-// Future<InitializationStatus> _initGoogleMobileAds() {
-//     // TODO: Initialize Google Mobile Ads SDK
-//     return MobileAds.instance.initialize();
-//   }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       drawer: NavDrawer(widget.user),
       backgroundColor: AppColors.whiteColor,
       floatingActionButton: FloatingActionButton.extended(
@@ -147,6 +123,8 @@ class _JobListState extends State<JobList> {
         body  : CustomScrollView(
               slivers: [
                 SliverAppBar(
+
+                  elevation: 5,
                   backgroundColor: AppColors.appMainColor2,
                   actions: [
                     Container(
@@ -157,7 +135,7 @@ class _JobListState extends State<JobList> {
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         // border: Border.all(color: Colors.white10),
-                        // color: Colors.white10,
+
                       ),
                       child: Center(
                         child: Stack(

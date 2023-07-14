@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jobsnap/models/versionModel.dart';
 import 'package:jobsnap/services/versionService.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import '../ads/bannerAd.dart';
 import '../config/colors.dart';
 import '../cubits/jobs/jobCubits.dart';
 import '../logic/jobsLogic.dart';
 import '../models/userModel.dart';
 import '../services/jobServices.dart';
+import '../widgets/googleads.dart';
 import '../widgets/snackbar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,21 +26,50 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var search = TextEditingController();
 
-  var items = ["hello", "world"];
+
   VersionService versionService = VersionService();
   late VersionModel versionModel;
   bool showUpdateCard = false;
 
+
+  late BannerAd bannerAd;
+  bool isLoaded = false;
+  var adUnitId="ca-app-pub-3940256099942544/6300978111";
+  var bannerUnitId="ca-app-pub-7075855553997936/1074607355";
+  var bannerTestUnitId="ca-app-pub-3940256099942544/6300978111";
+
+  initBannerAd(){
+    bannerAd=BannerAd(
+        size: AdSize.banner,
+        adUnitId: bannerTestUnitId,
+        listener:BannerAdListener(
+            onAdLoaded: (ad){
+              setState(() {
+                isLoaded=true;
+                print("isloaded");
+              });
+            },
+            onAdFailedToLoad: (ad,error){
+              ad.dispose();
+              print("errorerrorerror");
+              print("errorerrorerror");
+              print("errorerrorerror");
+            }
+        ) ,
+        request: const AdRequest()
+    );
+    bannerAd.load();
+  }
+
+
   @override
   void initState() {
-    // TODO: implement initState
+    initBannerAd();
     FocusManager.instance.primaryFocus?.unfocus();
-    _initPackageInfo();
 
+    _initPackageInfo();
     Future.delayed(const Duration(seconds: 5), () {
       checkUpdate();
-      print(_packageInfo.version);
-      // print(versionModel.version);
     });
     super.initState();
   }
@@ -60,14 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> checkUpdate() async {
     versionModel = await versionService.getUpdates();
-    print(versionModel.version);
+
 
     if (versionModel.version != _packageInfo.version) {
       setState(() {
         showUpdateCard = true;
       });
     } else {
-      print("No update available");
+     return;
     }
   }
 
@@ -76,11 +108,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
+
         backgroundColor: AppColors.whiteColor,
+        bottomNavigationBar: GoogleAdBannner(),
         body: Container(
           color: Colors.white10,
           height: double.maxFinite,
           width: double.maxFinite,
+
+          // child: BannerAdWidget(),
+          //   child: Text(_packageInfo.buildNumber,style: TextStyle(color: Colors.black),),
+          // ),
           child: Stack(
             children: [
               // JobList(user),

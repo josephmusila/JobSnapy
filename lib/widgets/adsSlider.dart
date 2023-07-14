@@ -22,21 +22,18 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20)),
+          // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20)),
               // color: Colors.red
          gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
 
              // stops: [0, 0.2, 0.8, 1],
-                  colors:  [
+                  colors:  const [
                     AppColors.appMainColor2,
-                    AppColors.appMainColor2.withOpacity(0.2),
                     // AppColors.appMainColor2,
-                    // AppColors.appMainColor2,
-                    // Color.fromARGB(173, 20, 20, 50),
                     AppColors.whiteColor,
-                    AppColors.whiteColor,
+                    // AppColors.appMainColor1,
                   ]
                  )
       ),
@@ -52,15 +49,16 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
         ),
         items: List.generate(
           widget.notifications.length,
+          // 4,
           (index) {
             return Card(
               elevation: 3,
-              color: Colors.white,
+              color: AppColors.appMainColor1,
               child: Container(
                 height: 300,
                 margin: EdgeInsets.only(top: 0, left: 10,bottom: 20),
                 decoration: BoxDecoration(
-                  color: AppColors.whiteColor1,
+                  color: AppColors.whiteColor1.withOpacity(0),
                   //   gradient: LinearGradient(colors: const [
                   //     AppColors.appMainColor1,
                   //     AppColors.appMainColor2,
@@ -72,13 +70,7 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   child: Stack(
                     children: <Widget>[
-                      // Image.asset("img/backg.jpg",
-                      //     fit: BoxFit.cover, height: 400, width: 1000.0),
-                      // Image.asset(
-                      //   // color: Colors.white,
-                      //   "img/image3.jpg",
-                      //   fit: BoxFit.fill,
-                      // ),
+
                       Positioned(
                         bottom: 15.0,
                         left: 10.0,
@@ -94,7 +86,7 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
                             widget.notifications[index].notification,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: AppColors.appTextColor1,
+                              color: AppColors.appTextColor3,
                               fontSize: 18.0,
                               fontWeight: FontWeight.w500,
                             ),

@@ -52,7 +52,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
           color: AppColors.appTextColor3,
         ),
         label: const Text(
-          "Connecting...",
+          "Loading...",
           style: TextStyle(color: AppColors.appTextColor3),
         ),
       ),
@@ -61,7 +61,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
         backgroundColor: AppColors.appMainColor2,
         title: const Text(
           "JobSnap",
-          style: TextStyle(color: AppColors.appPrimaryColor),
+          style: TextStyle(color: AppColors.whiteColor1,fontSize: 25),
         ),
       ),
       body: Container(
@@ -105,7 +105,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                         onEnd: () {
                           opacity = 0;
                         },
-                        curve: Curves.linear,
+                        curve: Curves.easeInOutCubicEmphasized,
                         child: Container(
                           decoration: BoxDecoration(
                             border:
@@ -127,11 +127,7 @@ class _JobLoadingSkeletonState extends State<JobLoadingSkeleton>
                                   backgroundColor:
                                       AppColors.appTextColor2.withOpacity(0.5),
                                   radius: 25,
-                                  child: const CircularProgressIndicator(
-                                    color: AppColors.appPrimaryColor,
-                                    strokeWidth: 7,
-                                    backgroundColor: AppColors.appMainColor2,
-                                  ),
+                                  child:  Text("${index+1}")
                                 ),
                               ),
                               Expanded(

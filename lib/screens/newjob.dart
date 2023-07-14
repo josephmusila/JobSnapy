@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobsnap/ads/bannerAd.dart';
 
 import '../config/colors.dart';
 import '../config/urls.dart';
@@ -54,6 +55,7 @@ class _AddJobState extends State<AddJob> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BannerAdWidget(),
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         leading: IconButton(

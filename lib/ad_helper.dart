@@ -1,34 +1,104 @@
-// import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
-// class AdHelper {
+class AdManager {
 
-//   static String get bannerAdUnitId {
-//     if (Platform.isAndroid) {
-//       return 'ca-app-pub-3940256099942544/6300978111';
-//     } else if (Platform.isIOS) {
-//       return '<YOUR_IOS_BANNER_AD_UNIT_ID>';
-//     } else {
-//       throw UnsupportedError('Unsupported platform');
-//     }
-//   }
+  static Future<void> loadUnityIntAd() async {
+    await UnityAds.load(
+      placementId: AdHelper.interstitialId,
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
+  }
 
-//   static String get interstitialAdUnitId {
-//     if (Platform.isAndroid) {
-//       return 'ca-app-pub-7075855553997936~3241605696';
-//     } else if (Platform.isIOS) {
-//       return '<YOUR_IOS_INTERSTITIAL_AD_UNIT_ID>';
-//     } else {
-//       throw UnsupportedError('Unsupported platform');
-//     }
-//   }
+  static Future<void> showIntAd() async {
+    UnityAds.showVideoAd(
+        placementId: AdHelper.interstitialId,
+        onStart: (placementId) => print('Video Ad $placementId started'),
+        onClick: (placementId) => print('Video Ad $placementId click'),
+        onSkipped: (placementId) => print('Video Ad $placementId skipped'),
+        onComplete: (placementId) async {
+          await loadUnityIntAd();
+        },
+        onFailed: (placementId, error, message) async {
+          await loadUnityIntAd();
+        });
+  }
 
-//   static String get rewardedAdUnitId {
-//     if (Platform.isAndroid) {
-//       return '<YOUR_ANDROID_REWARDED_AD_UNIT_ID>';
-//     } else if (Platform.isIOS) {
-//       return '<YOUR_IOS_REWARDED_AD_UNIT_ID>';
-//     } else {
-//       throw UnsupportedError('Unsupported platform');
-//     }
-//   }
-// }
+  static Future<void> loadUnityRewardedAd() async {
+    await UnityAds.load(
+      placementId: AdHelper.rewardedId,
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
+  }
+
+  static Future<void> showBannerAd() async {
+    UnityBannerAd(
+      placementId: AdHelper.bannerId,
+      onLoad: (placementId) => print('Banner loaded: $placementId'),
+      onClick: (placementId) => print('Banner clicked: $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Banner Ad $placementId failed: $error $message'),
+    );
+  }
+
+  static Future<void> showRewardedAd() async {
+    UnityAds.showVideoAd(
+        placementId: AdHelper.rewardedId,
+        onStart: (placementId) => print('Video Ad $placementId started'),
+        onClick: (placementId) => print('Video Ad $placementId click'),
+        onSkipped: (placementId) => print('Video Ad $placementId skipped'),
+        onComplete: (placementId) async {
+          await loadUnityRewardedAd();
+        },
+        onFailed: (placementId, error, message) async {
+          await loadUnityRewardedAd();
+        });
+  }
+}
+
+class AdHelper {
+  static String get addUnitId {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return '5325822';
+    }
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return '4994514';
+    }
+    return '';
+  }
+
+  static String get bannerId {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return 'Banner_Android';
+    }
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return 'Banner_iOS';
+    }
+    return '';
+  }
+
+  static String get interstitialId {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return 'Interstitial_Android';
+    }
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return 'Interstitial_iOS';
+    }
+    return '';
+  }
+
+
+  static String get rewardedId {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return 'Rewarded_Android';
+    }
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return 'Rewarded_iOS';
+    }
+    return '';
+  }
+}

@@ -19,24 +19,29 @@ class QuotesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      color: AppColors.appMainColor2,
-      height: 60,
-      child: AnimatedTextKit(
-        animatedTexts:List.generate(messages.length, (index) {
-          return  RotateAnimatedText(getRandomMessage(),
-              textAlign: TextAlign.center,
-              textStyle:const TextStyle(
-            fontSize: 16,
-            color: Color.fromARGB(255, 236, 233, 233),
-            fontWeight: FontWeight.w400,
-          ));
-        }),
-        repeatForever: true,
-        isRepeatingAnimation: true,
-        totalRepeatCount: 30,
-        pause: const Duration(milliseconds: 1000),
+    return Card(
+      elevation: 5,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        color: AppColors.whiteColor1,
+        height: 60,
+        child: AnimatedTextKit(
+          animatedTexts:List.generate(messages.length, (index) {
+            return  RotateAnimatedText(getRandomMessage(),
+                textAlign: TextAlign.center,
+                textStyle:const TextStyle(
+              fontSize: 16,
+              color: AppColors.appTextColor1,
+              fontWeight: FontWeight.w400,
+
+            ));
+          }),
+          displayFullTextOnTap: true,
+          repeatForever: true,
+          isRepeatingAnimation: true,
+          totalRepeatCount: 30,
+          pause: const Duration(milliseconds: 1000),
+        ),
       ),
     );
   }
