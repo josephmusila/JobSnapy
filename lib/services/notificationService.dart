@@ -11,6 +11,7 @@ class NotificationService{
   Future<List<NotificationsModel>> getNotifications() async {
     var response =
     await http.get(getNotificationsUrl);
+    // print(response.statusCode);
     return notificationsModelFromJson(response.body);
   }
 }

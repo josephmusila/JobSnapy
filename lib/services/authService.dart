@@ -73,6 +73,7 @@ class AuthService{
           "user":UserModel.fromJson(json.decode(response.body)["user"])
           // "user":userModelFromJson(jsonDecode(response.body)["user"])
         };
+        print(message);
         return (message);
       }else{
         var message = {

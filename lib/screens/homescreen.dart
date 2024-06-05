@@ -64,13 +64,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    initBannerAd();
+    // initBannerAd();
     FocusManager.instance.primaryFocus?.unfocus();
 
-    _initPackageInfo();
-    Future.delayed(const Duration(seconds: 5), () {
-      checkUpdate();
-    });
+    // _initPackageInfo();
+    // Future.delayed(const Duration(seconds: 5), () {
+    //   checkUpdate();
+    // });
     super.initState();
   }
 
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (versionModel.version != _packageInfo.version) {
       setState(() {
-        showUpdateCard = true;
+        showUpdateCard = false;
       });
     } else {
      return;

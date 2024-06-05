@@ -105,7 +105,7 @@ class NavDrawer extends StatelessWidget {
               ),
               NavItem(
                 title: "About",
-                widget: About(),
+                widget: About(user),
                 icon: Icons.app_settings_alt_rounded,
               ),
             ],

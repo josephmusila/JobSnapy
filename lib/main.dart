@@ -41,13 +41,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       // home: HomeScreen(),
-      home: UpgradeAlert(
-        upgrader: Upgrader(
-          dialogStyle: UpgradeDialogStyle.cupertino,
-        ),
-        child: HomeScreen(),
-        // child: RegisterPage(),
-      ),
+      home: HomeScreen(),
     );
   }
 }

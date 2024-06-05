@@ -33,6 +33,7 @@ class JobCubits extends Cubit<JobState>{
 
 
     }catch(exception){
+      print(exception);
       emit(JobsDataError(exception.toString()));
     }
   }

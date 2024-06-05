@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import 'editJob.dart';
 
 class JobDetail extends StatefulWidget {
   JobsModel job;
@@ -35,26 +36,26 @@ class _JobDetailState extends State<JobDetail> {
   var isLoading = false;
   var isPressed = false;
   var applicationLoader = false;
+  var comments = TextEditingController();
+  JobService jobService = JobService();
+  final _formKey = GlobalKey<FormState>();
+  bool canEdit=false;
+
 
   @override
   void initState() {
     // TODO: implement initState
     // print("iuser in details is ${widget.user!.email}");
     checkTime();
+    isEligibleToEdit();
     super.initState();
   }
 
-  var comments = TextEditingController();
-  JobService jobService = JobService();
-  final _formKey = GlobalKey<FormState>();
 
   String checkTime() {
     DateTime posted = widget.job.datePosted;
-
     DateTime enDTime = DateTime.now();
-
     Duration lapsed = enDTime.difference(posted);
-
     var hours = lapsed.inHours % 24;
     var mins = lapsed.inMinutes % 60;
 
@@ -67,6 +68,15 @@ class _JobDetailState extends State<JobDetail> {
     }
   }
 
+  void isEligibleToEdit(){
+    if( (widget.user != null)  && (widget.user!.id == widget.job.postedBy.id) ){
+      canEdit=true;
+    }else{
+      canEdit=false;
+    }
+
+  }
+
   // final entries=NativeL
 
   @override
@@ -77,25 +87,59 @@ class _JobDetailState extends State<JobDetail> {
         bottomNavigationBar: GoogleAdBannner(),
         backgroundColor: AppColors.appMainColor2,
         appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    // Navigator.of(context).pop();
-                  },
-                ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigator.of(context).pop();
+            },
+          ),
 
-                backgroundColor: AppColors.appMainColor2,
-                // elevation: 0,
-                title: Text(
-                  "Job Id: ${widget.job.id.toString()}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w400),
-                  // overflow: TextOverflow.ellipsis,
-                ),
-              ),
+          actions: [
+            canEdit?IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return EditJob(
+                          user: widget.user as UserModel,
+                          job: widget.job,
+                        );
+                      },
+                    ),
+                  );
+                },
+                icon: Icon(Icons.edit))
+                : Container(),
 
+            // widget.job.postedBy.id == widget.user!.id ||
+            //         widget.user!.isSuperUser == true
+            //     ? IconButton(
+            //         onPressed: () {
+            //           Navigator.of(context).push(
+            //             MaterialPageRoute(
+            //               builder: (context) {
+            //                 return EditJob(
+            //                   user: widget.user as UserModel,
+            //                   job: widget.job,
+            //                 );
+            //               },
+            //             ),
+            //           );
+            //         },
+            //         icon: Icon(Icons.edit))
+            //     : Container()
+          ],
+
+          backgroundColor: AppColors.appMainColor2,
+          // elevation: 0,
+          title: Text(
+            "Job Id: ${widget.job.id.toString()}",
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+            // overflow: TextOverflow.ellipsis,
+          ),
+        ),
         body: BlocProvider(
           create: (context) => CommentsCubit(jobService: jobService),
           child: Container(
@@ -171,14 +215,12 @@ class _JobDetailState extends State<JobDetail> {
                                               0.8,
                                       child: SelectableLinkify(
                                         text: widget.job.jobDescription,
-
-                                          style: const TextStyle(
-                                            height: 1.4,
-                                            fontSize: 14,
-                                            color: AppColors.appTextColor1,
-                                          ),
+                                        style: const TextStyle(
+                                          height: 1.4,
+                                          fontSize: 14,
+                                          color: AppColors.appTextColor1,
+                                        ),
                                       ),
-
                                     ),
                                     const SizedBox(
                                       height: 10,
@@ -189,34 +231,45 @@ class _JobDetailState extends State<JobDetail> {
                                       height: 3,
                                     ),
                                     // const BannerAdWidget(),
-                                    widget.job.qualification!=null?const Text(
-                                      "Qualifications",
-                                      style: TextStyle(
-                                        color: AppColors.appTextColor1,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ):Container(),
+                                    widget.job.qualification != null
+                                        ? const Text(
+                                            "Qualifications",
+                                            style: TextStyle(
+                                              color: AppColors.appTextColor1,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          )
+                                        : Container(),
 
                                     const SizedBox(
                                       height: 3,
                                     ),
-                                    widget.job.qualification!=null?Container(
-                                      width: MediaQuery.of(context).size.width >
-                                          500
-                                          ? MediaQuery.of(context).size.width *
-                                          0.4
-                                          : MediaQuery.of(context).size.width *
-                                          0.8,
-                                      child: SelectableLinkify(text: widget.job.qualification ?? "Not Provided",
-
-                                          style: const TextStyle(
-                                            height: 1.4,
-                                            fontSize: 14,
-                                            color: AppColors.appTextColor1,
-                                          ),),
-
-                                    ):Container(),
+                                    widget.job.qualification != null
+                                        ? Container(
+                                            width: MediaQuery.of(context)
+                                                        .size
+                                                        .width >
+                                                    500
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.4
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.8,
+                                            child: SelectableLinkify(
+                                              text: widget.job.qualification ??
+                                                  "Not Provided",
+                                              style: const TextStyle(
+                                                height: 1.4,
+                                                fontSize: 14,
+                                                color: AppColors.appTextColor1,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
 
                                     const SizedBox(
                                       height: 10,
@@ -241,7 +294,7 @@ class _JobDetailState extends State<JobDetail> {
                                           : MediaQuery.of(context).size.width *
                                               0.8,
                                       child: SelectableLinkify(
-                                        onOpen: (link) async{
+                                        onOpen: (link) async {
                                           var url = Uri.parse(link.url);
 
                                           if (await canLaunchUrl(url)) {
@@ -251,35 +304,39 @@ class _JobDetailState extends State<JobDetail> {
                                                   "Opening ${link.url} in default app",
                                                   Colors.green),
                                             );
-                                          await launchUrl(url,mode: LaunchMode.externalApplication);
+                                            await launchUrl(url,
+                                                mode: LaunchMode
+                                                    .externalApplication);
                                           } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                          Utils.displayToast(
-                                          "Unable to open ${link.url}",
-                                          AppColors.appPrimaryColor),
-                                          );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              Utils.displayToast(
+                                                  "Unable to open ${link.url}",
+                                                  AppColors.appPrimaryColor),
+                                            );
                                           }
                                         },
-                                        onTap: () async{
-
-                                        },
-                                        text:widget.job.applicationMethod ?? "Not Provided",style: const TextStyle(
-                                        height: 1.4,
-                                        fontSize: 14,
-                                        color: AppColors.appTextColor1,
-                                      ), ),
-
+                                        onTap: () async {},
+                                        text: widget.job.applicationMethod ??
+                                            "Not Provided",
+                                        style: const TextStyle(
+                                          height: 1.4,
+                                          fontSize: 14,
+                                          color: AppColors.appTextColor1,
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(height: 10,),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
                                     GoogleAdBannner(),
-                                    const SizedBox(height: 10,),
-
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
                                   ],
                                 ),
                               ),
                             ),
-
                       Container(
                         height: 200,
                         width: double.maxFinite,
@@ -394,17 +451,16 @@ class _JobDetailState extends State<JobDetail> {
                                           .showSnackBar(Utils.displayToast(
                                               "Please Login to complete application",
                                               AppColors.appPrimaryColor));
-                                    }else if(widget.job.postedBy.id == widget.user?.id){
+                                    } else if (widget.job.postedBy.id ==
+                                        widget.user?.id) {
                                       setState(() {
                                         applicationLoader = false;
                                       });
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(Utils.displayToast(
-                                          "Operation not allowed as you are the job owner",
-                                          AppColors.appPrimaryColor));
-                                    }
-
-                                    else {
+                                              "Operation not allowed as you are the job owner",
+                                              AppColors.appPrimaryColor));
+                                    } else {
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(

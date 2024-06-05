@@ -5,10 +5,6 @@ import '../config/colors.dart';
 
 
 class AppTitle extends StatelessWidget {
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -21,7 +17,7 @@ class AppTitle extends StatelessWidget {
         ),
         children: [
           TextSpan(
-          text: "Span",
+          text: "Snap",
           style: TextStyle(
             color: AppColors.appPrimaryColor,
             fontSize: 24,

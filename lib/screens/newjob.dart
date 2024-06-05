@@ -9,6 +9,7 @@ import '../models/userModel.dart';
 import '../services/jobServices.dart';
 import '../widgets/customWidgets.dart';
 import '../widgets/expandTextField.dart';
+import '../widgets/googleads.dart';
 import '../widgets/loadingScreen.dart';
 import '../widgets/postRules.dart';
 import '../widgets/snackbar.dart';
@@ -55,7 +56,7 @@ class _AddJobState extends State<AddJob> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BannerAdWidget(),
+      bottomNavigationBar: GoogleAdBannner(),
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         leading: IconButton(

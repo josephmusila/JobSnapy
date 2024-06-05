@@ -14,58 +14,52 @@ class JobService {
     try {
       var response = await http.get(getAllJobsUrl);
       jobs = jobsModelFromJson(response.body);
-      print(response.body);
+      print(jobs);
       return jobs;
     } catch (e) {
-      print( "eee$e");
+      print(e.toString());
       throw e.toString();
     }
   }
 
-  Future<dynamic> postJob({
-    required String jobName, required String jobDescription,required String qualification,
-    required String applicationMethod, required bool verified,
-
-    required String postedBy}) async {
+  Future<dynamic> postJob(
+      {required String jobName,
+      required String jobDescription,
+      required String qualification,
+      required String applicationMethod,
+      required bool verified,
+      required String postedBy}) async {
     try {
-
-
       var response =
           await http.post(Uri.parse("${BaseUrls().baseUrl}jobs/"), body: {
-            "application_method":applicationMethod,
-            "qualifications":qualification,
+        "application_method": applicationMethod,
+        "qualifications": qualification,
         "posted_by": postedBy,
         "job_name": jobName,
-            // "poster":poster,
+        // "poster":poster,
         "job_description": jobDescription,
-            "verified":"true",
-
+        "verified": "true",
       });
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         getAllJobs();
         return response.statusCode;
-      }else{
+      } else {
         return response.statusCode;
       }
-
-    }  catch (e) {
+    } catch (e) {
       throw e;
     }
   }
 
   Future<dynamic> jobPoster(
-      {
-        required bool verified,
-        required bool isImage,
-        required String poster,
-        required String postedBy}) async {
+      {required bool verified,
+      required bool isImage,
+      required String poster,
+      required String postedBy}) async {
     print("hello");
     try {
-
       var request = await http.MultipartRequest(
           "POST", Uri.parse("${BaseUrls().baseUrl}jobs/"));
-
-
 
       request.fields["verified"] = "true";
       request.fields["isImage"] = "true";
@@ -89,7 +83,6 @@ class JobService {
       } else {
         print(response.body);
         return response.statusCode;
-
       }
     } catch (e) {
       print(e.toString());
@@ -97,11 +90,12 @@ class JobService {
     }
   }
 
-  Future<dynamic> deleteJob({required String id,required String user}) async{
-    var response = await http.delete(Uri.parse("${BaseUrls().baseUrl}deletejob/$id"),body: {"user":user});
+  Future<dynamic> deleteJob({required String id, required String user}) async {
+    var response = await http.delete(
+        Uri.parse("${BaseUrls().baseUrl}deletejob/$id"),
+        body: {"user": user});
     getAllJobs();
   }
-
 
   Future<dynamic> addComment(
       {required String comment,
@@ -143,8 +137,49 @@ class JobService {
       } else {
         print(response.reasonPhrase);
       }
-    }  catch (e) {
+    } catch (e) {
       throw e;
+    }
+  }
+
+
+  Future<dynamic> updateJob( {required String jobName,
+    required String jobDescription,
+    required String qualification,
+    required String applicationMethod,
+    required bool verified,
+    required String id,
+    required String postedBy}) async {
+    // var message = {"status_code": 0, "message": ""};
+    try {
+      var response = await http
+          .put(Uri.parse("${BaseUrls().baseUrl}updatejob/$id/"), body: {
+        "job_name": jobName,
+        "job_description": jobDescription,
+        "application_method": applicationMethod,
+        "qualifications": qualification,
+        "posted_by": postedBy,
+        "verified":"true"
+      });
+
+      if (response.statusCode == 200) {
+        var message = {
+          "status_code": response.statusCode,
+          "message": "Job Updated Successfully"
+        };
+
+        return message;
+      } else {
+        var message = {
+          "status_code": response.statusCode,
+
+        };
+
+        return message;
+      }
+    } catch (e) {
+
+      throw e.toString();
     }
   }
 }

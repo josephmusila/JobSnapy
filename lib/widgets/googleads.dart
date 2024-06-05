@@ -24,14 +24,10 @@ class _GoogleAdBannnerState extends State<GoogleAdBannner> {
             onAdLoaded: (ad){
               setState(() {
                 isLoaded=true;
-                print("isloaded");
               });
             },
             onAdFailedToLoad: (ad,error){
               ad.dispose();
-              print("errorerrorerror");
-              print("errorerrorerror");
-              print("errorerrorerror");
             }
         ) ,
         request: const AdRequest()
